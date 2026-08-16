@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#07111f">
+
+    <title>SENTRA — Emergency Response</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+</head>
+
+<body>
+
+<!-- =========================
+     APP
+========================= -->
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">S</div>
+
+            <div>
+                <h1>SENTRA</h1>
+                <span>Emergency Response</span>
+            </div>
+        </div>
+
+        <nav>
+
+            <button class="nav-item active" onclick="showPage('dashboard', this)">
+                <span>⌂</span>
+                Dashboard
+            </button>
+
+            <button class="nav-item" onclick="showPage('emergency', this)">
+                <span>⚠</span>
+                Emergency
+            </button>
+
+            <button class="nav-item" onclick="showPage('device', this)">
+                <span>◉</span>
+                Device
+            </button>
+
+            <button class="nav-item" onclick="showPage('history', this)">
+                <span>◷</span>
+                History
+            </button>
+
+            <button class="nav-item" onclick="showPage('settings', this)">
+                <span>⚙</span>
+                Settings
+            </button>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="connection">
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>System Online</strong>
+                    <small>Everything is working</small>
+                </div>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div>
+                <p class="eyebrow">SENTRA SYSTEM</p>
+                <h2 id="pageTitle">Dashboard</h2>
+            </div>
+
+            <div class="profile">
+
+                <div class="avatar">
+                    V
+                </div>
+
+                <div>
+                    <strong>Patient</strong>
+                    <small>Protected</small>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =========================
+             DASHBOARD
+        ========================== -->
+
+        <section id="dashboard" class="page active-page">
+
+            <div class="hero-card">
+
+                <div>
+
+                    <span class="live-label">
+                        <span class="status-dot"></span>
+                        MONITORING ACTIVE
+                    </span>
+
+                    <h3>
+                        You're protected.
+                    </h3>
+
+                    <p>
+                        SENTRA is continuously monitoring your
+                        emergency device.
+                    </p>
+
+                </div>
+
+                <div class="shield">
+                    ✓
+                </div>
+
+            </div>
+
+
+            <!-- STATUS GRID -->
+
+            <div class="grid">
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <span>Device</span>
+                        <span class="green">●</span>
+                    </div>
+
+                    <h3>Connected</h3>
+
+                    <p class="muted">
+                        SENTRA-ESP32
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <span>Battery</span>
+                        <span>▰</span>
+                    </div>
+
+                    <h3>86%</h3>
+
+                    <div class="progress">
+                        <div style="width:86%"></div>
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <span>Heart Rate</span>
+                        <span>♥</span>
+                    </div>
+
+                    <h3>78 <small>BPM</small></h3>
+
+                    <p class="muted">
+                        Normal
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <span>Last Check</span>
+                        <span>◷</span>
+                    </div>
+
+                    <h3>Just now</h3>
+
+                    <p class="muted">
+                        Device responding
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- SOS -->
+
+            <div class="sos-section">
+
+                <div>
+
+                    <p class="eyebrow">EMERGENCY CONTROL</p>
+
+                    <h3>Need immediate help?</h3>
+
+                    <p class="muted">
+                        Press the SOS button to immediately
+                        notify the emergency response system.
+                    </p>
+
+                </div>
+
+                <button class="sos-button" onclick="triggerSOS()">
+                    <span>🆘</span>
+                    SOS
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             EMERGENCY
+        ========================== -->
+
+        <section id="emergency" class="page">
+
+            <div class="section-heading">
+
+                <div>
+                    <p class="eyebrow">EMERGENCY CENTER</p>
+                    <h3>Emergency Status</h3>
+                </div>
+
+                <span class="badge safe">
+                    NO ACTIVE EMERGENCY
+                </span>
+
+            </div>
+
+
+            <div class="emergency-card safe-card">
+
+                <div class="large-status">
+                    ✓
+                </div>
+
+                <h3>No emergency detected</h3>
+
+                <p>
+                    SENTRA is monitoring your device.
+                    If a fall is detected, you'll be notified here.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             DEVICE
+        ========================== -->
+
+        <section id="device" class="page">
+
+            <div class="section-heading">
+
+                <div>
+                    <p class="eyebrow">HARDWARE</p>
+                    <h3>Device Status</h3>
+                </div>
+
+            </div>
+
+
+            <div class="device-card">
+
+                <div class="device-icon">
+                    ◉
+                </div>
+
+                <div class="device-info">
+
+                    <span class="muted">DEVICE ID</span>
+
+                    <h3>SENTRA-ESP32-001</h3>
+
+                    <span class="green">
+                        ● Connected
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="grid">
+
+                <div class="card">
+                    <span class="muted">Accelerometer</span>
+                    <h3>Active</h3>
+                </div>
+
+                <div class="card">
+                    <span class="muted">Fall Detection</span>
+                    <h3 class="green-text">Ready</h3>
+                </div>
+
+                <div class="card">
+                    <span class="muted">Network</span>
+                    <h3 class="green-text">Online</h3>
+                </div>
+
+                <div class="card">
+                    <span class="muted">Battery</span>
+                    <h3>86%</h3>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             HISTORY
+        ========================== -->
+
+        <section id="history" class="page">
+
+            <div class="section-heading">
+
+                <div>
+                    <p class="eyebrow">ACTIVITY</p>
+                    <h3>Emergency History</h3>
+                </div>
+
+            </div>
+
+
+            <div class="history-list">
+
+                <div class="history-item">
+
+                    <div class="history-icon safe-icon">
+                        ✓
+                    </div>
+
+                    <div>
+                        <strong>System check completed</strong>
+                        <small>Today · 8:32 PM</small>
+                    </div>
+
+                    <span class="green">Normal</span>
+
+                </div>
+
+
+                <div class="history-item">
+
+                    <div class="history-icon">
+                        ◉
+                    </div>
+
+                    <div>
+                        <strong>Device connected</strong>
+                        <small>Today · 8:10 PM</small>
+                    </div>
+
+                    <span class="green">Connected</span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             SETTINGS
+        ========================== -->
+
+        <section id="settings" class="page">
+
+            <div class="section-heading">
+
+                <div>
+                    <p class="eyebrow">SYSTEM</p>
+                    <h3>Settings</h3>
+                </div>
+
+            </div>
+
+
+            <div class="settings-list">
+
+                <div class="setting">
+
+                    <div>
+                        <strong>Emergency Notifications</strong>
+                        <small>
+                            Receive emergency alerts
+                        </small>
+                    </div>
+
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span></span>
+                    </label>
+
+                </div>
+
+
+                <div class="setting">
+
+                    <div>
+                        <strong>Automatic Fall Detection</strong>
+                        <small>
+                            Automatically detect possible falls
+                        </small>
+                    </div>
+
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span></span>
+                    </label>
+
+                </div>
+
+
+                <div class="setting">
+
+                    <div>
+                        <strong>Sound Alerts</strong>
+                        <small>
+                            Play sound during emergencies
+                        </small>
+                    </div>
+
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span></span>
+                    </label>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<!-- =========================
+     SOS MODAL
+========================= -->
+
+<div id="sosModal" class="modal">
+
+    <div class="modal-content">
+
+        <div class="warning-icon">
+            !
+        </div>
+
+        <h2>Emergency Alert</h2>
+
+        <p>
+            Are you sure you want to send an emergency
+            alert to the response team?
+        </p>
+
+        <div class="modal-buttons">
+
+            <button class="cancel" onclick="closeSOS()">
+                Cancel
+            </button>
+
+            <button class="confirm" onclick="confirmSOS()">
+                SEND HELP
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>
