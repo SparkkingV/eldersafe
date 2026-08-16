@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color"
+          content="#07111f">
+
+    <meta name="description"
+          content="ELDERSAFE - Real-time elderly fall detection and emergency response system.">
+
+    <title>ELDERSAFE | Real-Time Elder Safety</title>
+
+
+    <!-- =====================================================
+         GOOGLE FONT
+    ====================================================== -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+
+    <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+    <!-- =====================================================
+         SUPABASE
+    ====================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <!-- =====================================================
+         MAIN CSS
+    ====================================================== -->
+
+    <link rel="stylesheet"
+          href="css/main.css">
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+
+        <!-- LOGO -->
+
+        <a href="index.html"
+           class="logo">
+
+            <div class="logo-icon">
+
+                <i class="fa-solid fa-shield-heart"></i>
+
+            </div>
+
+            <div class="logo-text">
+
+                <span>ELDER</span>
+                <strong>SAFE</strong>
+
+            </div>
+
+        </a>
+
+
+        <!-- DESKTOP NAVIGATION -->
+
+        <nav class="nav-links">
+
+            <a href="#features">
+                Features
+            </a>
+
+            <a href="#how-it-works">
+                How It Works
+            </a>
+
+            <a href="#technology">
+                Technology
+            </a>
+
+        </nav>
+
+
+        <!-- NAV ACTIONS -->
+
+        <div class="nav-actions">
+
+            <a href="auth/login.html"
+               class="btn btn-login">
+
+                Login
+
+            </a>
+
+            <a href="auth/register.html"
+               class="btn btn-primary">
+
+                Get Started
+
+            </a>
+
+        </div>
+
+
+        <!-- MOBILE MENU BUTTON -->
+
+        <button class="mobile-menu-btn"
+                id="mobileMenuBtn"
+                aria-label="Open menu"
+                aria-expanded="false"
+                type="button">
+
+            <i class="fa-solid fa-bars"></i>
+
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     MOBILE MENU
+===================================================== -->
+
+<div class="mobile-menu"
+     id="mobileMenu">
+
+    <a href="#features">
+        Features
+    </a>
+
+    <a href="#how-it-works">
+        How It Works
+    </a>
+
+    <a href="#technology">
+        Technology
+    </a>
+
+
+    <div class="mobile-menu-actions">
+
+        <a href="auth/login.html"
+           class="btn btn-login">
+
+            Login
+
+        </a>
+
+        <a href="auth/register.html"
+           class="btn btn-primary">
+
+            Get Started
+
+        </a>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero">
+
+
+    <!-- BACKGROUND EFFECT -->
+
+    <div class="hero-grid"></div>
+
+    <div class="hero-glow hero-glow-1"></div>
+
+    <div class="hero-glow hero-glow-2"></div>
+
+
+    <div class="hero-container">
+
+
+        <!-- LEFT CONTENT -->
+
+        <div class="hero-content">
+
+
+            <div class="status-pill">
+
+                <span class="status-dot"></span>
+
+                REAL-TIME SAFETY SYSTEM
+
+            </div>
+
+
+            <h1>
+
+                Protecting those
+                <span>who matter most.</span>
+
+            </h1>
+
+
+            <p class="hero-description">
+
+                ELDERSAFE is a real-time elderly safety and
+                emergency response platform that detects
+                potential falls, sends instant alerts, and
+                connects patients with emergency responders.
+
+            </p>
+
+
+            <div class="hero-buttons">
+
+
+                <a href="auth/register.html"
+                   class="btn btn-primary btn-large">
+
+                    Get Started
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
+
+
+                <a href="#how-it-works"
+                   class="btn btn-outline btn-large">
+
+                    See How It Works
+
+                </a>
+
+            </div>
+
+
+            <!-- TRUST INDICATORS -->
+
+            <div class="hero-trust">
+
+
+                <div class="trust-item">
+
+                    <i class="fa-solid fa-bolt"></i>
+
+                    <span>
+                        Real-Time Alerts
+                    </span>
+
+                </div>
+
+
+                <div class="trust-item">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    <span>
+                        Live Location
+                    </span>
+
+                </div>
+
+
+                <div class="trust-item">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                    <span>
+                        Secure
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- RIGHT VISUAL -->
+
+        <div class="hero-visual">
+
+
+            <div class="dashboard-preview">
+
+
+                <!-- PREVIEW HEADER -->
+
+                <div class="preview-header">
+
+
+                    <div class="preview-brand">
+
+                        <div class="mini-logo">
+
+                            <i class="fa-solid fa-shield-heart"></i>
+
+                        </div>
+
+                        <span>
+                            ELDERSAFE
+                        </span>
+
+                    </div>
+
+
+                    <div class="preview-status">
+
+                        <span></span>
+
+                        SYSTEM ONLINE
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SAFETY CARD -->
+
+                <div class="safety-card">
+
+
+                    <div class="safety-icon">
+
+                        <i class="fa-solid fa-heart-pulse"></i>
+
+                    </div>
+
+
+                    <div class="safety-info">
+
+                        <small>
+                            SAFETY STATUS
+                        </small>
+
+                        <h3>
+                            Everything is safe
+                        </h3>
+
+                        <span>
+                            Monitoring is active
+                        </span>
+
+                    </div>
+
+
+                    <div class="safe-check">
+
+                        <i class="fa-solid fa-check"></i>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- STAT CARDS -->
+
+                <div class="preview-stats">
+
+
+                    <div class="preview-stat">
+
+                        <div class="stat-icon">
+
+                            <i class="fa-solid fa-microchip"></i>
+
+                        </div>
+
+                        <div>
+
+                            <small>
+                                DEVICE
+                            </small>
+
+                            <strong>
+                                Connected
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="preview-stat">
+
+                        <div class="stat-icon">
+
+                            <i class="fa-solid fa-location-crosshairs"></i>
+
+                        </div>
+
+                        <div>
+
+                            <small>
+                                LOCATION
+                            </small>
+
+                            <strong>
+                                Active
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ACTIVITY -->
+
+                <div class="activity-card">
+
+
+                    <div class="activity-header">
+
+                        <span>
+                            LIVE ACTIVITY
+                        </span>
+
+                        <i class="fa-solid fa-ellipsis"></i>
+
+                    </div>
+
+
+                    <div class="activity-item">
+
+                        <div class="activity-icon green">
+
+                            <i class="fa-solid fa-check"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                System check completed
+                            </strong>
+
+                            <small>
+                                Just now
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="activity-item">
+
+                        <div class="activity-icon blue">
+
+                            <i class="fa-solid fa-wifi"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Device connected
+                            </strong>
+
+                            <small>
+                                2 minutes ago
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="activity-item">
+
+                        <div class="activity-icon purple">
+
+                            <i class="fa-solid fa-shield"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Safety monitoring active
+                            </strong>
+
+                            <small>
+                                5 minutes ago
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- FLOATING ALERT -->
+
+            <div class="floating-alert">
+
+                <div class="alert-icon">
+
+                    <i class="fa-solid fa-bell"></i>
+
+                </div>
+
+                <div>
+
+                    <strong>
+                        Instant Alerts
+                    </strong>
+
+                    <span>
+                        Emergency team connected
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FEATURES
+===================================================== -->
+
+<section class="section features-section"
+         id="features">
+
+    <div class="section-container">
+
+
+        <div class="section-heading">
+
+            <div class="section-label">
+                WHY ELDERSAFE
+            </div>
+
+            <h2>
+
+                Safety that never
+                <span>looks away.</span>
+
+            </h2>
+
+            <p>
+
+                Designed to provide continuous monitoring
+                and rapid emergency communication without
+                making everyday life complicated.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="features-grid">
+
+
+            <article class="feature-card">
+
+                <div class="feature-icon">
+
+                    <i class="fa-solid fa-person-falling"></i>
+
+                </div>
+
+                <h3>
+                    Fall Detection
+                </h3>
+
+                <p>
+
+                    Sensor technology continuously monitors
+                    movement and identifies potential fall
+                    events.
+
+                </p>
+
+            </article>
+
+
+
+            <article class="feature-card">
+
+                <div class="feature-icon">
+
+                    <i class="fa-solid fa-bell"></i>
+
+                </div>
+
+                <h3>
+                    Instant Alerts
+                </h3>
+
+                <p>
+
+                    Emergency events are transmitted to the
+                    connected response system in real time.
+
+                </p>
+
+            </article>
+
+
+
+            <article class="feature-card">
+
+                <div class="feature-icon">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                </div>
+
+                <h3>
+                    Live Location
+                </h3>
+
+                <p>
+
+                    Help responders identify the patient's
+                    location when an emergency occurs.
+
+                </p>
+
+            </article>
+
+
+
+            <article class="feature-card">
+
+                <div class="feature-icon">
+
+                    <i class="fa-solid fa-user-shield"></i>
+
+                </div>
+
+                <h3>
+                    Secure Access
+                </h3>
+
+                <p>
+
+                    Separate patient, ambulance, and
+                    administrator accounts keep the system
+                    organized and protected.
+
+                </p>
+
+            </article>
+
+
+
+            <article class="feature-card">
+
+                <div class="feature-icon">
+
+                    <i class="fa-solid fa-tower-broadcast"></i>
+
+                </div>
+
+                <h3>
+                    Real-Time Monitoring
+                </h3>
+
+                <p>
+
+                    Connected devices and emergency status
+                    can be monitored through a live dashboard.
+
+                </p>
+
+            </article>
+
+
+
+            <article class="feature-card">
+
+                <div class="feature-icon">
+
+                    <i class="fa-solid fa-mobile-screen"></i>
+
+                </div>
+
+                <h3>
+                    Works Everywhere
+                </h3>
+
+                <p>
+
+                    Access ELDERSAFE from phones, tablets,
+                    laptops, and desktop computers.
+
+                </p>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     HOW IT WORKS
+===================================================== -->
+
+<section class="section how-section"
+         id="how-it-works">
+
+    <div class="section-container">
+
+
+        <div class="section-heading centered">
+
+            <div class="section-label">
+                HOW IT WORKS
+            </div>
+
+            <h2>
+
+                From detection to
+                <span>response.</span>
+
+            </h2>
+
+            <p>
+
+                ELDERSAFE connects the sensing device,
+                patient, and emergency response team
+                into one real-time system.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="steps">
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    01
+                </div>
+
+                <div class="step-icon">
+
+                    <i class="fa-solid fa-microchip"></i>
+
+                </div>
+
+                <h3>
+                    Detect
+                </h3>
+
+                <p>
+
+                    The connected device monitors movement
+                    and detects a potential fall.
+
+                </p>
+
+            </div>
+
+
+            <div class="step-line"></div>
+
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    02
+                </div>
+
+                <div class="step-icon">
+
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                </div>
+
+                <h3>
+                    Transmit
+                </h3>
+
+                <p>
+
+                    The event is securely transmitted to
+                    the ELDERSAFE backend.
+
+                </p>
+
+            </div>
+
+
+            <div class="step-line"></div>
+
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    03
+                </div>
+
+                <div class="step-icon">
+
+                    <i class="fa-solid fa-bell"></i>
+
+                </div>
+
+                <h3>
+                    Alert
+                </h3>
+
+                <p>
+
+                    The patient and emergency response
+                    dashboard receive the alert instantly.
+
+                </p>
+
+            </div>
+
+
+            <div class="step-line"></div>
+
+
+
+            <div class="step">
+
+                <div class="step-number">
+                    04
+                </div>
+
+                <div class="step-icon">
+
+                    <i class="fa-solid fa-truck-medical"></i>
+
+                </div>
+
+                <h3>
+                    Respond
+                </h3>
+
+                <p>
+
+                    The responding team can accept the
+                    emergency and navigate to the patient.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     TECHNOLOGY
+===================================================== -->
+
+<section class="section technology-section"
+         id="technology">
+
+    <div class="section-container">
+
+        <div class="technology-content">
+
+
+            <div class="technology-text">
+
+                <div class="section-label">
+                    THE TECHNOLOGY
+                </div>
+
+                <h2>
+
+                    One connected
+                    <span>safety network.</span>
+
+                </h2>
+
+                <p>
+
+                    ELDERSAFE combines embedded sensors,
+                    wireless communication, cloud services,
+                    real-time databases, and a responsive
+                    web platform.
+
+                </p>
+
+
+                <div class="technology-list">
+
+
+                    <div class="tech-item">
+
+                        <div class="tech-check">
+
+                            <i class="fa-solid fa-check"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                ESP32 Device
+                            </strong>
+
+                            <span>
+                                Real-time sensor monitoring
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="tech-item">
+
+                        <div class="tech-check">
+
+                            <i class="fa-solid fa-check"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Cloud Backend
+                            </strong>
+
+                            <span>
+                                Secure data processing
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="tech-item">
+
+                        <div class="tech-check">
+
+                            <i class="fa-solid fa-check"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Real-Time Database
+                            </strong>
+
+                            <span>
+                                Instant emergency updates
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="tech-item">
+
+                        <div class="tech-check">
+
+                            <i class="fa-solid fa-check"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Role-Based Access
+                            </strong>
+
+                            <span>
+                                Patient, ambulance & admin
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- NETWORK VISUAL -->
+
+            <div class="network-visual">
+
+
+                <div class="network-center">
+
+                    <div class="network-center-icon">
+
+                        <i class="fa-solid fa-shield-heart"></i>
+
+                    </div>
+
+                    <strong>
+                        ELDERSAFE
+                    </strong>
+
+                    <span>
+                        REAL-TIME CORE
+                    </span>
+
+                </div>
+
+
+
+                <div class="network-node node-patient">
+
+                    <i class="fa-solid fa-user"></i>
+
+                    <span>
+                        Patient
+                    </span>
+
+                </div>
+
+
+
+                <div class="network-node node-device">
+
+                    <i class="fa-solid fa-microchip"></i>
+
+                    <span>
+                        ESP32
+                    </span>
+
+                </div>
+
+
+
+                <div class="network-node node-cloud">
+
+                    <i class="fa-solid fa-cloud"></i>
+
+                    <span>
+                        Cloud
+                    </span>
+
+                </div>
+
+
+
+                <div class="network-node node-ambulance">
+
+                    <i class="fa-solid fa-truck-medical"></i>
+
+                    <span>
+                        Ambulance
+                    </span>
+
+                </div>
+
+
+
+                <div class="network-line line-1"></div>
+
+                <div class="network-line line-2"></div>
+
+                <div class="network-line line-3"></div>
+
+                <div class="network-line line-4"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CTA
+===================================================== -->
+
+<section class="cta-section">
+
+    <div class="cta-container">
+
+
+        <div class="cta-icon">
+
+            <i class="fa-solid fa-shield-heart"></i>
+
+        </div>
+
+
+        <h2>
+            Build a safer tomorrow.
+        </h2>
+
+
+        <p>
+
+            Join ELDERSAFE and connect to a smarter,
+            real-time safety network.
+
+        </p>
+
+
+        <div class="cta-buttons">
+
+
+            <a href="auth/register.html"
+               class="btn btn-primary btn-large">
+
+                Create Account
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </a>
+
+
+            <a href="auth/login.html"
+               class="btn btn-outline btn-large">
+
+                Sign In
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="footer">
+
+    <div class="footer-container">
+
+
+        <div class="footer-brand">
+
+
+            <a href="index.html"
+               class="logo">
+
+                <div class="logo-icon">
+
+                    <i class="fa-solid fa-shield-heart"></i>
+
+                </div>
+
+                <div class="logo-text">
+
+                    <span>ELDER</span>
+                    <strong>SAFE</strong>
+
+                </div>
+
+            </a>
+
+
+            <p>
+
+                Real-time elderly safety and emergency
+                response technology.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="footer-links">
+
+
+            <div>
+
+                <h4>
+                    Platform
+                </h4>
+
+                <a href="#features">
+                    Features
+                </a>
+
+                <a href="#how-it-works">
+                    How It Works
+                </a>
+
+                <a href="#technology">
+                    Technology
+                </a>
+
+            </div>
+
+
+
+            <div>
+
+                <h4>
+                    Account
+                </h4>
+
+                <a href="auth/login.html">
+                    Login
+                </a>
+
+                <a href="auth/register.html">
+                    Register
+                </a>
+
+            </div>
+
+
+
+            <div>
+
+                <h4>
+                    ELDERSAFE
+                </h4>
+
+                <a href="#">
+                    About
+                </a>
+
+                <a href="#">
+                    Privacy
+                </a>
+
+                <a href="#">
+                    Terms
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="footer-bottom">
+
+        <span>
+            © 2026 ELDERSAFE. All rights reserved.
+        </span>
+
+        <span>
+            Built for safer living.
+        </span>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================================
+     APP JAVASCRIPT
+===================================================== -->
+
+<script src="js/app.js"></script>
+
+
+</body>
+</html>

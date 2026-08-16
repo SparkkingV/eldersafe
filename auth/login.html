@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#f5f8f7"
+    >
+
+    <meta
+        name="description"
+        content="Sign in to your ELDERSAFE safety network."
+    >
+
+    <title>Login | ELDERSAFE</title>
+
+
+    <!-- =====================================================
+         GOOGLE FONT
+    ====================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+
+    <!-- =====================================================
+         SUPABASE
+    ====================================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+    </script>
+
+
+    <!-- =====================================================
+         MAIN CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../css/main.css"
+    >
+
+
+    <!-- =====================================================
+         AUTH CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../css/auth.css"
+    >
+
+</head>
+
+
+<body class="auth-page">
+
+
+    <!-- =====================================================
+         BACKGROUND
+    ====================================================== -->
+
+    <div class="auth-background">
+
+        <div class="auth-grid"></div>
+
+        <div class="auth-glow auth-glow-1"></div>
+
+        <div class="auth-glow auth-glow-2"></div>
+
+    </div>
+
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <header class="auth-navbar">
+
+        <a
+            href="../index.html"
+            class="logo"
+        >
+
+            <div class="logo-icon">
+
+                <i class="fa-solid fa-shield-heart"></i>
+
+            </div>
+
+            <div class="logo-text">
+
+                <span>ELDER</span><strong>SAFE</strong>
+
+            </div>
+
+        </a>
+
+
+        <a
+            href="../index.html"
+            class="auth-back"
+        >
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            <span>Back to Home</span>
+
+        </a>
+
+    </header>
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="auth-container">
+
+
+        <!-- =================================================
+             LOGIN CARD
+        ================================================== -->
+
+        <section
+            class="auth-card"
+            aria-labelledby="loginTitle"
+        >
+
+
+            <!-- BRAND ICON -->
+
+            <div class="auth-card-brand">
+
+                <div class="auth-icon">
+
+                    <i class="fa-solid fa-shield-heart"></i>
+
+                </div>
+
+            </div>
+
+
+            <!-- HEADING -->
+
+            <div class="auth-heading">
+
+                <div class="section-label">
+
+                    ELDERSAFE ACCESS
+
+                </div>
+
+
+                <h1 id="loginTitle">
+
+                    Welcome <span>back.</span>
+
+                </h1>
+
+
+                <p>
+
+                    Sign in to continue to your
+                    ELDERSAFE safety network.
+
+                </p>
+
+            </div>
+
+
+            <!-- ERROR -->
+
+            <div
+                id="authError"
+                class="auth-message auth-error"
+                role="alert"
+                hidden
+            ></div>
+
+
+            <!-- SUCCESS -->
+
+            <div
+                id="authSuccess"
+                class="auth-message auth-success"
+                role="status"
+                hidden
+            ></div>
+
+
+            <!-- =================================================
+                 LOGIN FORM
+            ================================================== -->
+
+            <form
+                id="loginForm"
+                class="auth-form"
+                novalidate
+            >
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="email">
+
+                        Email Address
+
+                    </label>
+
+
+                    <div class="input-wrapper">
+
+                        <i
+                            class="fa-regular fa-envelope"
+                            aria-hidden="true"
+                        ></i>
+
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            autocomplete="email"
+                            inputmode="email"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <div class="form-label-row">
+
+                        <label for="password">
+
+                            Password
+
+                        </label>
+
+
+                        <button
+                            type="button"
+                            id="forgotPassword"
+                            class="forgot-password"
+                        >
+
+                            Forgot password?
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="input-wrapper password-wrapper">
+
+                        <i
+                            class="fa-solid fa-lock"
+                            aria-hidden="true"
+                        ></i>
+
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            aria-label="Show password"
+                            data-target="password"
+                        >
+
+                            <i
+                                class="fa-regular fa-eye"
+                                aria-hidden="true"
+                            ></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SUBMIT -->
+
+                <button
+    type="submit"
+    id="loginButton"
+    class="btn btn-primary auth-submit"
+>
+
+    <span id="loginButtonText" class="login-button-content">
+
+        Sign In
+
+        <i class="fa-solid fa-arrow-right"></i>
+
+    </span>
+
+    <span
+        id="loginSpinner"
+        class="auth-spinner"
+        hidden
+    >
+
+        <i class="fa-solid fa-circle-notch fa-spin"></i>
+
+        <span>Signing in...</span>
+
+    </span>
+
+</button>
+
+            </form>
+
+
+            <!-- DIVIDER -->
+
+            <div class="auth-divider">
+
+                <span>New to ELDERSAFE?</span>
+
+            </div>
+
+
+            <!-- REGISTER -->
+
+            <a
+                href="register.html"
+                class="auth-secondary-btn"
+            >
+
+                Create an account
+
+                <i
+                    class="fa-solid fa-arrow-right"
+                    aria-hidden="true"
+                ></i>
+
+            </a>
+
+
+            <!-- SECURITY -->
+
+            <div class="auth-security">
+
+                <i
+                    class="fa-solid fa-shield-halved"
+                    aria-hidden="true"
+                ></i>
+
+                <span>
+
+                    Your account is protected by
+                    secure authentication.
+
+                </span>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         APP JS
+    ====================================================== -->
+
+    <script src="../js/app.js"></script>
+
+</body>
+
+</html>

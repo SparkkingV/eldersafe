@@ -1,0 +1,1167 @@
+/* =========================================================
+   ELDERSAFE AUTHENTICATION SYSTEM
+   Login + Register
+   ========================================================= */
+
+/* =========================================================
+   AUTH PAGE
+   ========================================================= */
+
+.auth-page {
+    min-height: 100vh;
+    margin: 0;
+
+    background:
+        radial-gradient(
+            circle at 15% 15%,
+            rgba(23, 135, 125, 0.16),
+            transparent 32%
+        ),
+        radial-gradient(
+            circle at 85% 85%,
+            rgba(57, 121, 165, 0.12),
+            transparent 32%
+        ),
+        #f5f8f7;
+
+    color: var(--text);
+    font-family: "Inter", sans-serif;
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   BACKGROUND
+   ========================================================= */
+
+.auth-background {
+    position: fixed;
+    inset: 0;
+
+    z-index: 0;
+
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.auth-grid {
+    position: absolute;
+    inset: 0;
+
+    opacity: 0.35;
+
+    background-image:
+        linear-gradient(
+            rgba(23, 135, 125, 0.035) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(23, 135, 125, 0.035) 1px,
+            transparent 1px
+        );
+
+    background-size: 55px 55px;
+}
+
+.auth-glow {
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    border-radius: 50%;
+
+    filter: blur(100px);
+
+    opacity: 0.25;
+}
+
+.auth-glow-1 {
+    top: -260px;
+    left: -180px;
+
+    background: var(--teal-soft);
+}
+
+.auth-glow-2 {
+    right: -250px;
+    bottom: -260px;
+
+    background: var(--blue-soft);
+}
+
+
+/* =========================================================
+   AUTH NAVBAR
+   ========================================================= */
+
+.auth-navbar {
+    position: relative;
+
+    z-index: 10;
+
+    width: min(
+        var(--container),
+        calc(100% - 48px)
+    );
+
+    min-height: 76px;
+
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+/* =========================================================
+   AUTH LOGO
+   ========================================================= */
+
+.auth-navbar .logo {
+    display: inline-flex;
+
+    align-items: center;
+    gap: 10px;
+
+    color: var(--navy);
+
+    font-size: 17px;
+    font-weight: 800;
+
+    letter-spacing: -0.5px;
+}
+
+.auth-navbar .logo-icon {
+    width: 36px;
+    height: 36px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 9px;
+
+    color: #ffffff;
+
+    background: var(--teal);
+
+    box-shadow:
+        0 8px 20px
+        rgba(23, 135, 125, 0.18);
+}
+
+.auth-navbar .logo-text {
+    color: var(--navy);
+}
+
+.auth-navbar .logo-text span {
+    color: var(--navy);
+}
+
+.auth-navbar .logo-text strong {
+    color: var(--teal);
+}
+
+
+/* =========================================================
+   BACK TO HOME
+   ========================================================= */
+
+.auth-back {
+    display: inline-flex;
+
+    align-items: center;
+    gap: 8px;
+
+    color: var(--text-secondary);
+
+    font-size: 13px;
+    font-weight: 600;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.auth-back:hover {
+    color: var(--teal);
+
+    transform: translateX(-2px);
+}
+
+
+/* =========================================================
+   AUTH CONTAINER
+   ========================================================= */
+
+.auth-container {
+    position: relative;
+
+    z-index: 5;
+
+    width: 100%;
+
+    min-height:
+        calc(100vh - 76px);
+
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: center;
+
+    padding:
+        35px 20px 70px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   AUTH CARD
+   ========================================================= */
+
+.auth-card {
+    width: 100%;
+
+    max-width: 460px;
+
+    padding: 38px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 18px;
+
+    background:
+        rgba(255, 255, 255, 0.96);
+
+    box-shadow:
+        var(--shadow-lg);
+
+    backdrop-filter: blur(18px);
+
+    animation:
+        authCardIn 0.55s ease both;
+}
+
+.register-card {
+    max-width: 500px;
+}
+
+
+/* =========================================================
+   CARD ANIMATION
+   ========================================================= */
+
+@keyframes authCardIn {
+    from {
+        opacity: 0;
+        transform:
+            translateY(20px)
+            scale(0.985);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+/* =========================================================
+   AUTH BRAND ICON
+   ========================================================= */
+
+.auth-card-brand {
+    display: flex;
+
+    justify-content: center;
+
+    margin-bottom: 20px;
+}
+
+.auth-icon {
+    width: 58px;
+    height: 58px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 15px;
+
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--teal),
+            var(--blue)
+        );
+
+    box-shadow:
+        0 12px 30px
+        rgba(23, 135, 125, 0.20);
+}
+
+.auth-icon i {
+    font-size: 22px;
+}
+
+
+/* =========================================================
+   AUTH HEADING
+   ========================================================= */
+
+.auth-heading,
+.auth-header {
+    text-align: center;
+
+    margin-bottom: 28px;
+}
+
+.auth-heading .section-label,
+.auth-header .section-label {
+    display: inline-flex;
+
+    align-items: center;
+
+    margin-bottom: 12px;
+
+    color: var(--teal);
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+}
+
+.auth-heading h1,
+.auth-header h1 {
+    margin: 0;
+
+    color: var(--navy);
+
+    font-size:
+        clamp(30px, 5vw, 38px);
+
+    line-height: 1.1;
+
+    letter-spacing: -1.5px;
+
+    font-weight: 800;
+}
+
+.auth-heading h1 span,
+.auth-header h1 span {
+    color: var(--teal);
+}
+
+.auth-heading p,
+.auth-header p {
+    max-width: 390px;
+
+    margin:
+        12px auto 0;
+
+    color: var(--text-secondary);
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.auth-form {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+}
+
+
+/* =========================================================
+   FORM GROUP
+   ========================================================= */
+
+.form-group {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+.form-group label {
+    color: var(--navy);
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   LABEL ROW
+   ========================================================= */
+
+.form-label-row {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+}
+
+.forgot-password {
+    border: none;
+
+    padding: 0;
+
+    background: transparent;
+
+    color: var(--teal);
+
+    font-family: inherit;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.forgot-password:hover {
+    color: var(--teal-dark);
+
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   INPUT WRAPPER
+   ========================================================= */
+
+.input-wrapper {
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+}
+
+.input-wrapper > i {
+    position: absolute;
+
+    left: 15px;
+
+    z-index: 2;
+
+    color: var(--text-muted);
+
+    font-size: 13px;
+
+    pointer-events: none;
+
+    transition:
+        color 0.2s ease;
+}
+
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+.input-wrapper input {
+    width: 100%;
+
+    height: 50px;
+
+    padding:
+        0 15px 0 43px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 10px;
+
+    outline: none;
+
+    background:
+        #f9fbfa;
+
+    color: var(--text);
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.input-wrapper input::placeholder {
+    color: #a2afb2;
+}
+
+.input-wrapper input:hover {
+    border-color:
+        var(--border-dark);
+}
+
+.input-wrapper input:focus {
+    border-color:
+        var(--teal);
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(23, 135, 125, 0.08);
+}
+
+.input-wrapper:focus-within > i {
+    color: var(--teal);
+}
+
+
+/* =========================================================
+   PASSWORD
+   ========================================================= */
+
+.password-wrapper input {
+    padding-right: 50px;
+}
+
+.password-toggle {
+    position: absolute;
+
+    right: 6px;
+    top: 50%;
+
+    width: 38px;
+    height: 38px;
+
+    display: grid;
+    place-items: center;
+
+    transform:
+        translateY(-50%);
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: var(--text-muted);
+
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease;
+}
+
+.password-toggle:hover {
+    color: var(--teal);
+
+    background:
+        var(--teal-soft);
+}
+
+.password-toggle i {
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   INPUT HINT
+   ========================================================= */
+
+.input-hint {
+    color: var(--text-muted);
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   ROLE SELECTOR
+   ========================================================= */
+
+.role-selector {
+    display: grid;
+
+    gap: 10px;
+}
+
+.role-option {
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 13px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 11px;
+
+    background:
+        #ffffff;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.role-option:hover {
+    border-color:
+        #bdd8d4;
+
+    transform:
+        translateY(-1px);
+}
+
+.role-option.selected {
+    border-color:
+        var(--teal);
+
+    background:
+        var(--teal-soft);
+
+    box-shadow:
+        0 5px 18px
+        rgba(23, 135, 125, 0.07);
+}
+
+.role-option input {
+    position: absolute;
+
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   ROLE ICON
+   ========================================================= */
+
+.role-icon {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 10px;
+
+    color: var(--teal);
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid var(--border);
+
+    font-size: 14px;
+}
+
+.role-option.selected .role-icon {
+    border-color:
+        #c8e3df;
+}
+
+
+/* =========================================================
+   ROLE CONTENT
+   ========================================================= */
+
+.role-content,
+.role-info {
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+.role-content strong,
+.role-info strong {
+    color: var(--navy);
+
+    font-size: 12px;
+
+    font-weight: 750;
+}
+
+.role-content span,
+.role-info span {
+    color: var(--text-muted);
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   ROLE CHECK
+   ========================================================= */
+
+.role-check,
+.role-radio {
+    width: 22px;
+    height: 22px;
+
+    flex-shrink: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    border:
+        1px solid var(--border-dark);
+
+    border-radius: 50%;
+
+    color: transparent;
+
+    font-size: 9px;
+
+    transition:
+        all 0.2s ease;
+}
+
+.role-option.selected .role-check,
+.role-option.selected .role-radio {
+    border-color:
+        var(--teal);
+
+    background:
+        var(--teal);
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   SUBMIT BUTTON
+   ========================================================= */
+
+.auth-submit {
+    width: 100%;
+
+    min-height: 51px;
+
+    margin-top: 3px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    border: none;
+
+    font-family: inherit;
+}
+
+.auth-submit:hover {
+    transform:
+        translateY(-1px);
+}
+
+.auth-submit:disabled {
+    opacity: 0.65;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+.auth-submit span {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+}
+
+.auth-spinner {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+/* =========================================================
+   AUTH MESSAGES
+   ========================================================= */
+
+.auth-message {
+    margin-bottom: 18px;
+
+    padding:
+        12px 14px;
+
+    border-radius: 9px;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+.auth-error {
+    border:
+        1px solid #f0caca;
+
+    background:
+        var(--red-soft);
+
+    color:
+        #b73535;
+}
+
+.auth-success {
+    border:
+        1px solid #c9e5d7;
+
+    background:
+        var(--green-soft);
+
+    color:
+        #24704d;
+}
+
+
+/* =========================================================
+   DIVIDER
+   ========================================================= */
+
+.auth-divider {
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    margin:
+        24px 0 16px;
+
+    color:
+        var(--text-muted);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: "";
+
+    height: 1px;
+
+    flex: 1;
+
+    background:
+        var(--border);
+}
+
+.auth-divider span {
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   REGISTER TEXT
+   ========================================================= */
+
+.auth-register {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 5px;
+
+    color: var(--text-secondary);
+
+    font-size: 12px;
+
+    text-align: center;
+}
+
+.auth-register a {
+    color: var(--teal);
+
+    font-weight: 750;
+}
+
+.auth-register a:hover {
+    color:
+        var(--teal-dark);
+
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   SECONDARY BUTTON
+   ========================================================= */
+
+.auth-secondary-btn {
+    min-height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 10px;
+
+    color: var(--navy);
+
+    background:
+        #ffffff;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition:
+        border-color 0.2s ease,
+        color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.auth-secondary-btn:hover {
+    border-color:
+        var(--teal);
+
+    color:
+        var(--teal);
+
+    background:
+        var(--teal-soft);
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =========================================================
+   SECURITY
+   ========================================================= */
+
+.auth-security {
+    margin-top: 21px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    color:
+        var(--text-muted);
+
+    font-size: 9px;
+
+    line-height: 1.5;
+
+    text-align: center;
+}
+
+.auth-security i {
+    color:
+        var(--teal);
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .auth-navbar {
+        width:
+            calc(100% - 32px);
+
+        min-height: 68px;
+    }
+
+    .auth-navbar .logo {
+        font-size: 15px;
+    }
+
+    .auth-navbar .logo-icon {
+        width: 33px;
+        height: 33px;
+    }
+
+    .auth-back {
+        font-size: 11px;
+    }
+
+    .auth-container {
+        min-height:
+            calc(100vh - 68px);
+
+        padding:
+            20px 14px 45px;
+    }
+
+    .auth-card {
+        padding:
+            28px 20px;
+
+        border-radius:
+            16px;
+    }
+
+    .register-card {
+        max-width: 100%;
+    }
+
+    .auth-icon {
+        width: 53px;
+        height: 53px;
+    }
+
+    .auth-heading h1,
+    .auth-header h1 {
+        font-size: 29px;
+    }
+
+    .auth-heading p,
+    .auth-header p {
+        font-size: 12px;
+    }
+
+    .input-wrapper input {
+        height: 49px;
+    }
+
+    .role-option {
+        padding: 11px;
+    }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 400px) {
+
+    .auth-navbar {
+        width:
+            calc(100% - 24px);
+    }
+
+    .auth-back {
+        font-size: 0;
+    }
+
+    .auth-back i {
+        font-size: 14px;
+    }
+
+    .auth-card {
+        padding:
+            24px 16px;
+    }
+
+    .auth-heading h1,
+    .auth-header h1 {
+        font-size: 27px;
+    }
+
+    .role-content span,
+    .role-info span {
+        font-size: 9px;
+    }
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+.auth-page :focus-visible {
+    outline:
+        3px solid
+        rgba(23, 135, 125, 0.25);
+
+    outline-offset: 3px;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    .auth-card {
+        animation: none;
+    }
+
+    .auth-page *,
+    .auth-page *::before,
+    .auth-page *::after {
+        transition-duration:
+            0.01ms !important;
+
+        animation-duration:
+            0.01ms !important;
+    }
+}

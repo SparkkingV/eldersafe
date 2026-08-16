@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#f5f8f7"
+    >
+
+    <meta
+        name="description"
+        content="Create your ELDERSAFE account."
+    >
+
+    <title>Create Account | ELDERSAFE</title>
+
+
+    <!-- =====================================================
+         GOOGLE FONT
+    ====================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+
+    <!-- =====================================================
+         SUPABASE
+    ====================================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+    </script>
+
+
+    <!-- =====================================================
+         MAIN CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../css/main.css"
+    >
+
+
+    <!-- =====================================================
+         AUTH CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../css/auth.css"
+    >
+
+</head>
+
+
+<body class="auth-page">
+
+
+    <!-- =====================================================
+         BACKGROUND
+    ====================================================== -->
+
+    <div class="auth-background">
+
+        <div class="auth-grid"></div>
+
+        <div class="auth-glow auth-glow-1"></div>
+
+        <div class="auth-glow auth-glow-2"></div>
+
+    </div>
+
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <header class="auth-navbar">
+
+        <a
+            href="../index.html"
+            class="logo"
+        >
+
+            <div class="logo-icon">
+
+                <i class="fa-solid fa-shield-heart"></i>
+
+            </div>
+
+            <div class="logo-text">
+
+                <span>ELDER</span><strong>SAFE</strong>
+
+            </div>
+
+        </a>
+
+
+        <a
+            href="../index.html"
+            class="auth-back"
+        >
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            <span>Back to Home</span>
+
+        </a>
+
+    </header>
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="auth-container">
+
+
+        <!-- =================================================
+             REGISTER CARD
+        ================================================== -->
+
+        <section
+            class="auth-card register-card"
+            aria-labelledby="registerTitle"
+        >
+
+
+            <!-- BRAND ICON -->
+
+            <div class="auth-card-brand">
+
+                <div class="auth-icon">
+
+                    <i class="fa-solid fa-user-plus"></i>
+
+                </div>
+
+            </div>
+
+
+            <!-- HEADING -->
+
+            <div class="auth-heading">
+
+                <div class="section-label">
+
+                    JOIN ELDERSAFE
+
+                </div>
+
+
+                <h1 id="registerTitle">
+
+                    Create your <span>account.</span>
+
+                </h1>
+
+
+                <p>
+
+                    Connect to a smarter real-time
+                    safety network.
+
+                </p>
+
+            </div>
+
+
+            <!-- ERROR -->
+
+            <div
+                id="authError"
+                class="auth-message auth-error"
+                role="alert"
+                hidden
+            ></div>
+
+
+            <!-- SUCCESS -->
+
+            <div
+                id="authSuccess"
+                class="auth-message auth-success"
+                role="status"
+                hidden
+            ></div>
+
+
+            <!-- =================================================
+                 REGISTER FORM
+            ================================================== -->
+
+            <form
+                id="registerForm"
+                class="auth-form"
+                novalidate
+            >
+
+
+                <!-- FULL NAME -->
+
+                <div class="form-group">
+
+                    <label for="fullName">
+
+                        Full Name
+
+                    </label>
+
+
+                    <div class="input-wrapper">
+
+                        <i
+                            class="fa-regular fa-user"
+                            aria-hidden="true"
+                        ></i>
+
+
+                        <input
+                            type="text"
+                            id="fullName"
+                            name="fullName"
+                            placeholder="Enter your full name"
+                            autocomplete="name"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="email">
+
+                        Email Address
+
+                    </label>
+
+
+                    <div class="input-wrapper">
+
+                        <i
+                            class="fa-regular fa-envelope"
+                            aria-hidden="true"
+                        ></i>
+
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            autocomplete="email"
+                            inputmode="email"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     ACCOUNT TYPE
+                ================================================== -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        Account Type
+
+                    </label>
+
+
+                    <div class="role-selector">
+
+
+                        <!-- PATIENT -->
+
+                        <label
+                            class="role-option selected"
+                            data-role="patient"
+                        >
+
+                            <input
+                                type="radio"
+                                name="role"
+                                value="patient"
+                                checked
+                            >
+
+
+                            <div class="role-icon">
+
+                                <i
+                                    class="fa-solid fa-user"
+                                    aria-hidden="true"
+                                ></i>
+
+                            </div>
+
+
+                            <div class="role-content">
+
+                                <strong>
+
+                                    Patient
+
+                                </strong>
+
+                                <span>
+
+                                    Personal safety monitoring
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="role-check">
+
+                                <i
+                                    class="fa-solid fa-check"
+                                    aria-hidden="true"
+                                ></i>
+
+                            </div>
+
+                        </label>
+
+
+                        <!-- EMERGENCY RESPONDER -->
+
+                        <label
+                            class="role-option"
+                            data-role="ambulance"
+                        >
+
+                            <input
+                                type="radio"
+                                name="role"
+                                value="ambulance"
+                            >
+
+
+                            <div class="role-icon">
+
+                                <i
+                                    class="fa-solid fa-truck-medical"
+                                    aria-hidden="true"
+                                ></i>
+
+                            </div>
+
+
+                            <div class="role-content">
+
+                                <strong>
+
+                                    Emergency Responder
+
+                                </strong>
+
+                                <span>
+
+                                    Receive and respond to alerts
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="role-check">
+
+                                <i
+                                    class="fa-solid fa-check"
+                                    aria-hidden="true"
+                                ></i>
+
+                            </div>
+
+                        </label>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="password">
+
+                        Password
+
+                    </label>
+
+
+                    <div class="input-wrapper password-wrapper">
+
+                        <i
+                            class="fa-solid fa-lock"
+                            aria-hidden="true"
+                        ></i>
+
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Create a password"
+                            autocomplete="new-password"
+                            minlength="6"
+                            required
+                        >
+
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            aria-label="Show password"
+                            data-target="password"
+                        >
+
+                            <i
+                                class="fa-regular fa-eye"
+                                aria-hidden="true"
+                            ></i>
+
+                        </button>
+
+                    </div>
+
+
+                    <small class="input-hint">
+
+                        Use at least 6 characters.
+
+                    </small>
+
+                </div>
+
+
+                <!-- CONFIRM PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="confirmPassword">
+
+                        Confirm Password
+
+                    </label>
+
+
+                    <div class="input-wrapper password-wrapper">
+
+                        <i
+                            class="fa-solid fa-lock"
+                            aria-hidden="true"
+                        ></i>
+
+
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            placeholder="Confirm your password"
+                            autocomplete="new-password"
+                            minlength="6"
+                            required
+                        >
+
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            aria-label="Show password"
+                            data-target="confirmPassword"
+                        >
+
+                            <i
+                                class="fa-regular fa-eye"
+                                aria-hidden="true"
+                            ></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- REGISTER BUTTON -->
+
+                <button
+                    type="submit"
+                    id="registerButton"
+                    class="btn btn-primary auth-submit"
+                >
+
+                    <span id="registerButtonText">
+
+                        Create Account
+
+                        <i
+                            class="fa-solid fa-arrow-right"
+                            aria-hidden="true"
+                        ></i>
+
+                    </span>
+
+
+                    <span
+                        id="registerSpinner"
+                        class="auth-spinner"
+                        hidden
+                    >
+
+                        <i
+                            class="fa-solid fa-circle-notch fa-spin"
+                            aria-hidden="true"
+                        ></i>
+
+                        Creating account...
+
+                    </span>
+
+                </button>
+
+            </form>
+
+
+            <!-- =================================================
+                 LOGIN
+            ================================================== -->
+
+            <div class="auth-divider">
+
+                <span>OR</span>
+
+            </div>
+
+
+            <div class="auth-register">
+
+                <span>
+
+                    Already have an account?
+
+                </span>
+
+
+                <a href="login.html">
+
+                    Sign in
+
+                </a>
+
+            </div>
+
+
+            <!-- SECURITY -->
+
+            <div class="auth-security">
+
+                <i
+                    class="fa-solid fa-shield-halved"
+                    aria-hidden="true"
+                ></i>
+
+                <span>
+
+                    Your information is protected with
+                    secure authentication.
+
+                </span>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         APP JS
+    ====================================================== -->
+
+    <script src="../js/app.js"></script>
+
+</body>
+
+</html>

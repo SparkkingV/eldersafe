@@ -1,7 +1,7 @@
 /* =========================================================
    ELDERSAFE
    SINGLE APPLICATION JAVASCRIPT
-   VERSION 2.0
+   VERSION 3.0
    ========================================================= */
 
 
@@ -13,33 +13,50 @@ const SUPABASE_URL =
     "https://scalzhnlzeusufgqqdxc.supabase.co";
 
 const SUPABASE_ANON_KEY =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNjYWx6aG5semV1c3VmZ3FxZHhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4Nzg1MDcsImV4cCI6MjEwMjQ1NDUwN30.LPIHX1g60Pvx4JWyaXHowXfeuToGCSDXwbmC2mItSPs";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNjYWx6aG5semV1c3VmZ3FxZHhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4Nzg1MDcsImV4cCI6MjEwMjQ1NDUwN30.LPIHX1g60Pvx4JWyaXHowXfeuToGCSDXwbmC2mItSPs"
+        .replace(/\s/g, "");
 
 
-/*
-    Make sure Supabase library exists before creating client.
-*/
+/* =========================================================
+   2. CREATE SUPABASE CLIENT
+   ========================================================= */
+
+let supabaseClient = null;
 
 if (!window.supabase) {
 
     console.error(
-        "Supabase library was not loaded."
+        "ELDERSAFE: Supabase JavaScript library was not loaded."
     );
 
-} 
+} else {
 
+    try {
 
-const supabaseClient =
-    window.supabase
-        ? window.supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_ANON_KEY
-        )
-        : null;
+        supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_ANON_KEY
+            );
+
+        console.log(
+            "ELDERSAFE: Supabase client created."
+        );
+
+    } catch (error) {
+
+        console.error(
+            "ELDERSAFE: Failed to create Supabase client:",
+            error
+        );
+
+    }
+
+}
 
 
 /* =========================================================
-   2. GLOBAL STATE
+   3. GLOBAL STATE
    ========================================================= */
 
 let currentUser = null;
@@ -48,22 +65,27 @@ let currentProfile = null;
 
 let realtimeChannel = null;
 
+let authListener = null;
+
+let authenticationInitialized = false;
+
 
 /* =========================================================
-   3. PAGE DETECTION
+   4. PAGE DETECTION
    ========================================================= */
 
 const pathname =
     window.location.pathname
         .toLowerCase();
 
+const normalizedPath =
+    pathname.replace(/\/+$/, "");
 
 const currentPage =
-    pathname
+    normalizedPath
         .split("/")
         .filter(Boolean)
-        .pop() ||
-        "index.html";
+        .pop() || "index.html";
 
 
 const activePage =
@@ -73,14 +95,13 @@ const activePage =
 
 
 /* =========================================================
-   4. PAGE TYPE HELPERS
+   5. PAGE TYPE HELPERS
    ========================================================= */
 
 function isHomePage() {
 
     return (
-        activePage === "index.html" ||
-        activePage === ""
+        activePage === "index.html"
     );
 
 }
@@ -114,27 +135,24 @@ function isDashboardPage() {
 }
 
 
+function isResetPasswordPage() {
+
+    return (
+        activePage === "reset-password.html"
+    );
+
+}
+
+
 /* =========================================================
-   5. PATH HELPERS
+   6. PATH HELPERS
    ========================================================= */
-
-/*
-    Project structure:
-
-    /
-    ├── index.html
-    ├── dashboard.html
-    ├── reset-password.html
-    │
-    └── auth/
-        ├── login.html
-        └── register.html
-*/
-
 
 function rootPath(file) {
 
-    if (pathname.includes("/auth/")) {
+    if (
+        pathname.includes("/auth/")
+    ) {
 
         return "../" + file;
 
@@ -147,7 +165,9 @@ function rootPath(file) {
 
 function authPath(file) {
 
-    if (pathname.includes("/auth/")) {
+    if (
+        pathname.includes("/auth/")
+    ) {
 
         return file;
 
@@ -159,59 +179,90 @@ function authPath(file) {
 
 
 /* =========================================================
-   6. INITIALIZATION
+   7. REDIRECT HELPERS
+   ========================================================= */
+
+function redirectToDashboard() {
+
+    window.location.href =
+        rootPath("dashboard.html");
+
+}
+
+
+function redirectToLogin() {
+
+    window.location.href =
+        authPath("login.html");
+
+}
+
+
+function redirectToHome() {
+
+    window.location.href =
+        rootPath("index.html");
+
+}
+
+
+/* =========================================================
+   8. DOM READY
    ========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
-    async () => {
-
-        console.log(
-            "================================="
-        );
-
-        console.log(
-            "ELDERSAFE INITIALIZING"
-        );
-
-        console.log(
-            "Page:",
-            activePage
-        );
-
-        console.log(
-            "================================="
-        );
-
-
-        /*
-            UI can safely initialize on every page.
-        */
-
-        initializeCommonUI();
-
-
-        /*
-            Supabase authentication.
-        */
-
-        if (supabaseClient) {
-
-            await initializeAuthentication();
-
-        }
-
-
-        console.log(
-            "ELDERSAFE READY"
-        );
-
-    }
+    initializeApplication
 );
 
 
+async function initializeApplication() {
+
+    console.log(
+        "======================================"
+    );
+
+    console.log(
+        "ELDERSAFE INITIALIZING"
+    );
+
+    console.log(
+        "Page:",
+        activePage
+    );
+
+    console.log(
+        "======================================"
+    );
+
+
+    /*
+        Initialize normal website UI.
+    */
+
+    initializeCommonUI();
+
+
+    /*
+        Authentication.
+    */
+
+    if (supabaseClient) {
+
+        await initializeAuthentication();
+
+    }
+
+
+    console.log(
+        "ELDERSAFE READY"
+    );
+
+}
+
+
 /* =========================================================
-   7. COMMON UI
+   9. COMMON UI
    ========================================================= */
 
 function initializeCommonUI() {
@@ -230,7 +281,7 @@ function initializeCommonUI() {
 
 
 /* =========================================================
-   8. NAVBAR
+   10. NAVBAR
    ========================================================= */
 
 function initializeNavbar() {
@@ -239,7 +290,6 @@ function initializeNavbar() {
         document.querySelector(
             ".navbar"
         );
-
 
     if (!navbar) {
 
@@ -284,7 +334,7 @@ function initializeNavbar() {
 
 
 /* =========================================================
-   9. MOBILE MENU
+   11. MOBILE MENU
    ========================================================= */
 
 function initializeMobileMenu() {
@@ -294,17 +344,11 @@ function initializeMobileMenu() {
             ".mobile-menu-btn"
         );
 
-
     const mobileMenu =
         document.querySelector(
             ".mobile-menu"
         );
 
-
-    /*
-        If this page does not have a mobile menu,
-        simply do nothing.
-    */
 
     if (
         !menuButton ||
@@ -316,12 +360,9 @@ function initializeMobileMenu() {
     }
 
 
-    /*
-        Prevent duplicate listeners.
-    */
-
     if (
-        menuButton.dataset.initialized === "true"
+        menuButton.dataset.initialized ===
+        "true"
     ) {
 
         return;
@@ -333,17 +374,18 @@ function initializeMobileMenu() {
         "true";
 
 
+    menuButton.setAttribute(
+        "aria-expanded",
+        "false"
+    );
+
+
     menuButton.addEventListener(
         "click",
         () => {
 
-            mobileMenu.classList.toggle(
-                "active"
-            );
-
-
             const isOpen =
-                mobileMenu.classList.contains(
+                mobileMenu.classList.toggle(
                     "active"
                 );
 
@@ -367,7 +409,6 @@ function initializeMobileMenu() {
                     !isOpen
                 );
 
-
                 icon.classList.toggle(
                     "fa-xmark",
                     isOpen
@@ -386,49 +427,51 @@ function initializeMobileMenu() {
 
                 link.addEventListener(
                     "click",
-                    () => {
-
-                        mobileMenu.classList.remove(
-                            "active"
-                        );
-
-
-                        menuButton.setAttribute(
-                            "aria-expanded",
-                            "false"
-                        );
-
-
-                        const icon =
-                            menuButton.querySelector(
-                                "i"
-                            );
-
-
-                        if (icon) {
-
-                            icon.classList.remove(
-                                "fa-xmark"
-                            );
-
-
-                            icon.classList.add(
-                                "fa-bars"
-                            );
-
-                        }
-
-                    }
+                    closeMobileMenu
                 );
 
             }
         );
 
+
+    function closeMobileMenu() {
+
+        mobileMenu.classList.remove(
+            "active"
+        );
+
+
+        menuButton.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+
+        const icon =
+            menuButton.querySelector(
+                "i"
+            );
+
+
+        if (icon) {
+
+            icon.classList.remove(
+                "fa-xmark"
+            );
+
+            icon.classList.add(
+                "fa-bars"
+            );
+
+        }
+
+    }
+
 }
 
 
 /* =========================================================
-   10. SMOOTH SCROLLING
+   12. SMOOTH SCROLLING
    ========================================================= */
 
 function initializeSmoothScrolling() {
@@ -439,6 +482,20 @@ function initializeSmoothScrolling() {
         )
         .forEach(
             link => {
+
+                if (
+                    link.dataset.smoothInitialized ===
+                    "true"
+                ) {
+
+                    return;
+
+                }
+
+
+                link.dataset.smoothInitialized =
+                    "true";
+
 
                 link.addEventListener(
                     "click",
@@ -460,10 +517,21 @@ function initializeSmoothScrolling() {
                         }
 
 
-                        const target =
-                            document.querySelector(
-                                targetID
-                            );
+                        let target = null;
+
+
+                        try {
+
+                            target =
+                                document.querySelector(
+                                    targetID
+                                );
+
+                        } catch {
+
+                            return;
+
+                        }
 
 
                         if (!target) {
@@ -491,7 +559,7 @@ function initializeSmoothScrolling() {
 
 
 /* =========================================================
-   11. SCROLL REVEAL
+   13. SCROLL REVEAL
    ========================================================= */
 
 function initializeScrollReveal() {
@@ -589,7 +657,7 @@ function initializeScrollReveal() {
 
 
 /* =========================================================
-   12. PASSWORD TOGGLE
+   14. PASSWORD TOGGLE
    ========================================================= */
 
 function initializePasswordToggle() {
@@ -611,7 +679,8 @@ function initializePasswordToggle() {
         button => {
 
             if (
-                button.dataset.initialized === "true"
+                button.dataset.initialized ===
+                "true"
             ) {
 
                 return;
@@ -626,16 +695,6 @@ function initializePasswordToggle() {
             button.addEventListener(
                 "click",
                 () => {
-
-                    /*
-                        Support both:
-
-                        .password-wrapper input
-
-                        and
-
-                        button[data-target]
-                    */
 
                     let input = null;
 
@@ -707,7 +766,6 @@ function initializePasswordToggle() {
                             !isPassword
                         );
 
-
                         icon.classList.toggle(
                             "fa-eye-slash",
                             isPassword
@@ -733,19 +791,38 @@ function initializePasswordToggle() {
 
 
 /* =========================================================
-   13. AUTHENTICATION INITIALIZATION
+   15. AUTHENTICATION
    ========================================================= */
 
 async function initializeAuthentication() {
 
     if (!supabaseClient) {
 
+        console.error(
+            "ELDERSAFE: Supabase unavailable."
+        );
+
         return;
 
     }
 
 
+    if (authenticationInitialized) {
+
+        return;
+
+    }
+
+
+    authenticationInitialized =
+        true;
+
+
     try {
+
+        /*
+            Get current session.
+        */
 
         const {
             data,
@@ -763,8 +840,6 @@ async function initializeAuthentication() {
                 error
             );
 
-            return;
-
         }
 
 
@@ -776,11 +851,13 @@ async function initializeAuthentication() {
         console.log(
             "Current user:",
             currentUser
+                ? currentUser.email
+                : "Not authenticated"
         );
 
 
         /*
-            Page-specific initialization.
+            Handle current page.
         */
 
         if (isLoginPage()) {
@@ -789,13 +866,11 @@ async function initializeAuthentication() {
 
         }
 
-
         else if (isRegisterPage()) {
 
             await initializeRegisterPage();
 
         }
-
 
         else if (isDashboardPage()) {
 
@@ -803,42 +878,27 @@ async function initializeAuthentication() {
 
         }
 
+        else if (isResetPasswordPage()) {
+
+            initializeResetPasswordPage();
+
+        }
+
 
         /*
-            Global auth listener.
+            Auth listener.
         */
 
-        supabaseClient
-            .auth
-            .onAuthStateChange(
-                (
-                    event,
-                    session
-                ) => {
+        if (!authListener) {
 
-                    console.log(
-                        "Auth event:",
-                        event
+            authListener =
+                supabaseClient
+                    .auth
+                    .onAuthStateChange(
+                        handleAuthStateChange
                     );
 
-
-                    currentUser =
-                        session?.user ||
-                        null;
-
-
-                    if (
-                        event ===
-                        "SIGNED_OUT"
-                    ) {
-
-                        currentProfile =
-                            null;
-
-                    }
-
-                }
-            );
+        }
 
 
     } catch (error) {
@@ -854,30 +914,78 @@ async function initializeAuthentication() {
 
 
 /* =========================================================
-   14. LOGIN PAGE
+   16. AUTH STATE CHANGE
    ========================================================= */
 
-async function initializeLoginPage() {
+async function handleAuthStateChange(
+    event,
+    session
+) {
 
-    /*
-        Already logged in?
-    */
+    console.log(
+        "Auth event:",
+        event
+    );
 
-    if (currentUser) {
 
-        window.location.href =
-            rootPath(
-                "dashboard.html"
-            );
+    currentUser =
+        session?.user ||
+        null;
+
+
+    if (
+        event === "SIGNED_OUT"
+    ) {
+
+        currentProfile =
+            null;
+
+
+        await removeRealtimeChannel();
 
         return;
 
     }
 
 
-    /*
-        Support different form IDs.
-    */
+    if (
+        event === "SIGNED_IN" ||
+        event === "TOKEN_REFRESHED"
+    ) {
+
+        if (currentUser) {
+
+            /*
+                Do not immediately redirect here.
+                Page initialization handles redirects.
+            */
+
+            console.log(
+                "Authenticated:",
+                currentUser.email
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   17. LOGIN PAGE
+   ========================================================= */
+
+async function initializeLoginPage() {
+
+    if (currentUser) {
+
+        redirectToDashboard();
+
+        return;
+
+    }
+
 
     const loginForm =
         document.getElementById(
@@ -903,7 +1011,8 @@ async function initializeLoginPage() {
 
 
     if (
-        loginForm.dataset.initialized !== "true"
+        loginForm.dataset.initialized !==
+        "true"
     ) {
 
         loginForm.dataset.initialized =
@@ -918,10 +1027,6 @@ async function initializeLoginPage() {
     }
 
 
-    /*
-        Forgot password.
-    */
-
     const forgotPassword =
         document.getElementById(
             "forgotPassword"
@@ -933,7 +1038,8 @@ async function initializeLoginPage() {
 
     if (
         forgotPassword &&
-        forgotPassword.dataset.initialized !== "true"
+        forgotPassword.dataset.initialized !==
+        "true"
     ) {
 
         forgotPassword.dataset.initialized =
@@ -957,7 +1063,7 @@ async function initializeLoginPage() {
 
 
 /* =========================================================
-   15. LOGIN
+   18. LOGIN
    ========================================================= */
 
 async function handleLogin(event) {
@@ -965,24 +1071,31 @@ async function handleLogin(event) {
     event.preventDefault();
 
 
-    const emailInput =
-        findInput(
-            [
-                "email",
-                "loginEmail",
-                "signinEmail"
-            ]
+    if (!supabaseClient) {
+
+        showAuthError(
+            "Authentication service is unavailable."
         );
+
+        return;
+
+    }
+
+
+    const emailInput =
+        findInput([
+            "email",
+            "loginEmail",
+            "signinEmail"
+        ]);
 
 
     const passwordInput =
-        findInput(
-            [
-                "password",
-                "loginPassword",
-                "signinPassword"
-            ]
-        );
+        findInput([
+            "password",
+            "loginPassword",
+            "signinPassword"
+        ]);
 
 
     if (
@@ -1001,7 +1114,6 @@ async function handleLogin(event) {
 
     const email =
         emailInput.value.trim();
-
 
     const password =
         passwordInput.value;
@@ -1064,11 +1176,8 @@ async function handleLogin(event) {
             await supabaseClient
                 .auth
                 .signInWithPassword({
-
                     email,
-
                     password
-
                 });
 
 
@@ -1081,9 +1190,7 @@ async function handleLogin(event) {
 
 
             showAuthError(
-                getAuthErrorMessage(
-                    error
-                )
+                getAuthErrorMessage(error)
             );
 
 
@@ -1120,7 +1227,7 @@ async function handleLogin(event) {
 
 
         /*
-            Make sure profile exists.
+            Load/create profile.
         */
 
         await ensureUserProfile(
@@ -1134,14 +1241,7 @@ async function handleLogin(event) {
 
 
         setTimeout(
-            () => {
-
-                window.location.href =
-                    rootPath(
-                        "dashboard.html"
-                    );
-
-            },
+            redirectToDashboard,
             500
         );
 
@@ -1170,21 +1270,14 @@ async function handleLogin(event) {
 
 
 /* =========================================================
-   16. REGISTER PAGE
+   19. REGISTER PAGE
    ========================================================= */
 
 async function initializeRegisterPage() {
 
-    /*
-        Already logged in.
-    */
-
     if (currentUser) {
 
-        window.location.href =
-            rootPath(
-                "dashboard.html"
-            );
+        redirectToDashboard();
 
         return;
 
@@ -1218,7 +1311,8 @@ async function initializeRegisterPage() {
 
 
     if (
-        registerForm.dataset.initialized !== "true"
+        registerForm.dataset.initialized !==
+        "true"
     ) {
 
         registerForm.dataset.initialized =
@@ -1239,7 +1333,7 @@ async function initializeRegisterPage() {
 
 
 /* =========================================================
-   17. ROLE SELECTOR
+   20. ROLE SELECTOR
    ========================================================= */
 
 function initializeSignupRoleSelector() {
@@ -1260,10 +1354,6 @@ function initializeSignupRoleSelector() {
     roleInputs.forEach(
         input => {
 
-            /*
-                Set initial selected state.
-            */
-
             if (input.checked) {
 
                 updateRoleVisualState(
@@ -1274,7 +1364,8 @@ function initializeSignupRoleSelector() {
 
 
             if (
-                input.dataset.initialized === "true"
+                input.dataset.initialized ===
+                "true"
             ) {
 
                 return;
@@ -1304,7 +1395,7 @@ function initializeSignupRoleSelector() {
 
 
 /* =========================================================
-   18. ROLE VISUAL STATE
+   21. ROLE VISUAL STATE
    ========================================================= */
 
 function updateRoleVisualState(
@@ -1349,7 +1440,7 @@ function updateRoleVisualState(
 
 
 /* =========================================================
-   19. REGISTER
+   22. REGISTER
    ========================================================= */
 
 async function handleSignup(event) {
@@ -1357,47 +1448,50 @@ async function handleSignup(event) {
     event.preventDefault();
 
 
-    const emailInput =
-        findInput(
-            [
-                "email",
-                "registerEmail",
-                "signupEmail"
-            ]
+    if (!supabaseClient) {
+
+        showAuthError(
+            "Authentication service is unavailable."
         );
+
+        return;
+
+    }
+
+
+    const emailInput =
+        findInput([
+            "email",
+            "registerEmail",
+            "signupEmail"
+        ]);
 
 
     const passwordInput =
-        findInput(
-            [
-                "password",
-                "registerPassword",
-                "signupPassword"
-            ]
-        );
+        findInput([
+            "password",
+            "registerPassword",
+            "signupPassword"
+        ]);
 
 
     const confirmPasswordInput =
-        findInput(
-            [
-                "confirmPassword",
-                "confirm_password",
-                "registerConfirmPassword",
-                "signupConfirmPassword"
-            ]
-        );
+        findInput([
+            "confirmPassword",
+            "confirm_password",
+            "registerConfirmPassword",
+            "signupConfirmPassword"
+        ]);
 
 
     const nameInput =
-        findInput(
-            [
-                "fullName",
-                "full_name",
-                "name",
-                "registerName",
-                "signupName"
-            ]
-        );
+        findInput([
+            "fullName",
+            "full_name",
+            "name",
+            "registerName",
+            "signupName"
+        ]);
 
 
     if (
@@ -1417,16 +1511,13 @@ async function handleSignup(event) {
     const email =
         emailInput.value.trim();
 
-
     const password =
         passwordInput.value;
-
 
     const confirmPassword =
         confirmPasswordInput
             ? confirmPasswordInput.value
             : password;
-
 
     const fullName =
         nameInput
@@ -1450,7 +1541,7 @@ async function handleSignup(event) {
 
 
     /*
-        VALIDATION
+        Validation.
     */
 
     if (!fullName) {
@@ -1558,25 +1649,18 @@ async function handleSignup(event) {
             await supabaseClient
                 .auth
                 .signUp({
-
                     email,
-
                     password,
 
                     options: {
-
                         data: {
-
                             full_name:
                                 fullName,
 
                             role:
                                 role
-
                         }
-
                     }
-
                 });
 
 
@@ -1589,9 +1673,7 @@ async function handleSignup(event) {
 
 
             showAuthError(
-                getAuthErrorMessage(
-                    error
-                )
+                getAuthErrorMessage(error)
             );
 
 
@@ -1627,15 +1709,15 @@ async function handleSignup(event) {
 
 
         /*
-            If email confirmation is disabled,
-            Supabase gives us a session immediately.
+            Email confirmation disabled.
         */
 
         if (data.session) {
 
-            await ensureUserProfile(
-                data.user
-            );
+            currentProfile =
+                await ensureUserProfile(
+                    data.user
+                );
 
 
             showAuthSuccess(
@@ -1644,37 +1726,29 @@ async function handleSignup(event) {
 
 
             setTimeout(
-                () => {
-
-                    window.location.href =
-                        rootPath(
-                            "dashboard.html"
-                        );
-
-                },
+                redirectToDashboard,
                 700
             );
 
 
+            return;
+
         }
+
 
         /*
-            If email confirmation is enabled.
+            Email confirmation enabled.
         */
 
-        else {
-
-            showAuthSuccess(
-                "Account created. Please check your email to verify your account."
-            );
+        showAuthSuccess(
+            "Account created. Please check your email to verify your account."
+        );
 
 
-            setAuthLoading(
-                false,
-                "register"
-            );
-
-        }
+        setAuthLoading(
+            false,
+            "register"
+        );
 
 
     } catch (error) {
@@ -1701,7 +1775,7 @@ async function handleSignup(event) {
 
 
 /* =========================================================
-   20. FIND INPUT
+   23. FIND INPUT
    ========================================================= */
 
 function findInput(ids) {
@@ -1731,7 +1805,7 @@ function findInput(ids) {
 
 
 /* =========================================================
-   21. EMAIL VALIDATION
+   24. EMAIL VALIDATION
    ========================================================= */
 
 function isValidEmail(email) {
@@ -1743,14 +1817,15 @@ function isValidEmail(email) {
 
 
 /* =========================================================
-   22. PROFILE
+   25. ENSURE USER PROFILE
    ========================================================= */
 
-async function ensureUserProfile(
-    user
-) {
+async function ensureUserProfile(user) {
 
-    if (!user) {
+    if (
+        !user ||
+        !supabaseClient
+    ) {
 
         return null;
 
@@ -1784,13 +1859,14 @@ async function ensureUserProfile(
                 selectError
             );
 
+
             return null;
 
         }
 
 
         /*
-            Profile already exists.
+            Existing profile.
         */
 
         if (existingProfile) {
@@ -1798,18 +1874,29 @@ async function ensureUserProfile(
             currentProfile =
                 existingProfile;
 
+
             return existingProfile;
 
         }
 
 
         /*
-            Create profile.
+            Create new profile.
         */
 
         const metadata =
             user.user_metadata ||
             {};
+
+
+        const requestedRole =
+            metadata.role;
+
+
+        const role =
+            requestedRole === "ambulance"
+                ? "ambulance"
+                : "patient";
 
 
         const profileData = {
@@ -1826,9 +1913,7 @@ async function ensureUserProfile(
                 "",
 
             role:
-                metadata.role === "ambulance"
-                    ? "ambulance"
-                    : "patient"
+                role
 
         };
 
@@ -1848,19 +1933,15 @@ async function ensureUserProfile(
 
         if (insertError) {
 
-            /*
-                Possible race condition:
-                profile might have been created
-                between SELECT and INSERT.
-
-                Try fetching it again.
-            */
-
             console.warn(
                 "Profile creation failed:",
                 insertError
             );
 
+
+            /*
+                Retry lookup.
+            */
 
             const {
                 data: retryProfile
@@ -1879,6 +1960,7 @@ async function ensureUserProfile(
 
                 currentProfile =
                     retryProfile;
+
 
                 return retryProfile;
 
@@ -1904,6 +1986,7 @@ async function ensureUserProfile(
             error
         );
 
+
         return null;
 
     }
@@ -1912,12 +1995,15 @@ async function ensureUserProfile(
 
 
 /* =========================================================
-   23. GET CURRENT PROFILE
+   26. GET CURRENT PROFILE
    ========================================================= */
 
 async function getCurrentProfile() {
 
-    if (!currentUser) {
+    if (
+        !currentUser ||
+        !supabaseClient
+    ) {
 
         return null;
 
@@ -1947,12 +2033,22 @@ async function getCurrentProfile() {
                 error
             );
 
+
             return null;
 
         }
 
 
+        if (data) {
+
+            currentProfile =
+                data;
+
+        }
+
+
         return data;
+
 
     } catch (error) {
 
@@ -1960,6 +2056,7 @@ async function getCurrentProfile() {
             "Profile error:",
             error
         );
+
 
         return null;
 
@@ -1969,7 +2066,7 @@ async function getCurrentProfile() {
 
 
 /* =========================================================
-   24. DASHBOARD
+   27. DASHBOARD
    ========================================================= */
 
 async function initializeDashboardPage() {
@@ -1980,10 +2077,7 @@ async function initializeDashboardPage() {
 
     if (!currentUser) {
 
-        window.location.href =
-            authPath(
-                "login.html"
-            );
+        redirectToLogin();
 
         return;
 
@@ -1991,7 +2085,7 @@ async function initializeDashboardPage() {
 
 
     /*
-        Load profile.
+        Get profile.
     */
 
     currentProfile =
@@ -1999,7 +2093,7 @@ async function initializeDashboardPage() {
 
 
     /*
-        Create profile if missing.
+        Profile missing.
     */
 
     if (!currentProfile) {
@@ -2024,7 +2118,7 @@ async function initializeDashboardPage() {
 
 
     /*
-        Setup dashboard.
+        Initialize role-based dashboard.
     */
 
     initializeRoleDashboard(
@@ -2032,10 +2126,18 @@ async function initializeDashboardPage() {
     );
 
 
+    /*
+        Populate user information.
+    */
+
     populateUserInformation(
         currentProfile
     );
 
+
+    /*
+        Start realtime.
+    */
 
     initializeRealtime();
 
@@ -2043,7 +2145,7 @@ async function initializeDashboardPage() {
 
 
 /* =========================================================
-   25. ROLE DASHBOARD
+   28. ROLE DASHBOARD
    ========================================================= */
 
 function initializeRoleDashboard(
@@ -2058,8 +2160,9 @@ function initializeRoleDashboard(
 
 
     const role =
-        profile.role ||
-        "patient";
+        profile.role === "ambulance"
+            ? "ambulance"
+            : "patient";
 
 
     /*
@@ -2148,6 +2251,12 @@ function initializeRoleDashboard(
 
     if (dashboard) {
 
+        dashboard.classList.remove(
+            "role-patient",
+            "role-ambulance"
+        );
+
+
         dashboard.classList.add(
             `role-${role}`
         );
@@ -2158,7 +2267,7 @@ function initializeRoleDashboard(
 
 
 /* =========================================================
-   26. USER INFORMATION
+   29. USER INFORMATION
    ========================================================= */
 
 function populateUserInformation(
@@ -2265,7 +2374,7 @@ function populateUserInformation(
 
 
 /* =========================================================
-   27. USER INITIALS
+   30. USER INITIALS
    ========================================================= */
 
 function getInitials(name) {
@@ -2283,7 +2392,9 @@ function getInitials(name) {
             .split(/\s+/);
 
 
-    if (parts.length === 1) {
+    if (
+        parts.length === 1
+    ) {
 
         return parts[0]
             .substring(0, 2)
@@ -2301,7 +2412,7 @@ function getInitials(name) {
 
 
 /* =========================================================
-   28. ROLE FORMAT
+   31. ROLE FORMAT
    ========================================================= */
 
 function formatRole(role) {
@@ -2330,12 +2441,14 @@ function formatRole(role) {
 
 
 /* =========================================================
-   29. LOGOUT
+   32. LOGOUT
    ========================================================= */
 
 async function logout() {
 
     if (!supabaseClient) {
+
+        redirectToHome();
 
         return;
 
@@ -2343,6 +2456,9 @@ async function logout() {
 
 
     try {
+
+        await removeRealtimeChannel();
+
 
         const {
             error
@@ -2359,6 +2475,7 @@ async function logout() {
                 error
             );
 
+
             return;
 
         }
@@ -2367,37 +2484,11 @@ async function logout() {
         currentUser =
             null;
 
-
         currentProfile =
             null;
 
 
-        /*
-            Remove realtime channel.
-        */
-
-        if (realtimeChannel) {
-
-            await supabaseClient
-                .removeChannel(
-                    realtimeChannel
-                );
-
-
-            realtimeChannel =
-                null;
-
-        }
-
-
-        /*
-            Return to homepage.
-        */
-
-        window.location.href =
-            rootPath(
-                "index.html"
-            );
+        redirectToHome();
 
 
     } catch (error) {
@@ -2417,12 +2508,16 @@ window.logout =
 
 
 /* =========================================================
-   30. FORGOT PASSWORD
+   33. FORGOT PASSWORD
    ========================================================= */
 
 async function handleForgotPassword() {
 
     if (!supabaseClient) {
+
+        showAuthError(
+            "Authentication service is unavailable."
+        );
 
         return;
 
@@ -2430,13 +2525,11 @@ async function handleForgotPassword() {
 
 
     const emailInput =
-        findInput(
-            [
-                "email",
-                "loginEmail",
-                "signinEmail"
-            ]
-        );
+        findInput([
+            "email",
+            "loginEmail",
+            "signinEmail"
+        ]);
 
 
     if (!emailInput) {
@@ -2463,7 +2556,6 @@ async function handleForgotPassword() {
             "Enter your email address first."
         );
 
-
         emailInput.focus();
 
         return;
@@ -2486,6 +2578,10 @@ async function handleForgotPassword() {
 
     try {
 
+        const resetURL =
+            `${window.location.origin}/reset-password.html`;
+
+
         const {
             error
         } =
@@ -2494,21 +2590,24 @@ async function handleForgotPassword() {
                 .resetPasswordForEmail(
                     email,
                     {
-
                         redirectTo:
-                            `${window.location.origin}/reset-password.html`
-
+                            resetURL
                     }
                 );
 
 
         if (error) {
 
-            showAuthError(
-                getAuthErrorMessage(
-                    error
-                )
+            console.error(
+                "Password reset error:",
+                error
             );
+
+
+            showAuthError(
+                getAuthErrorMessage(error)
+            );
+
 
             return;
 
@@ -2538,7 +2637,200 @@ async function handleForgotPassword() {
 
 
 /* =========================================================
-   31. REALTIME
+   34. RESET PASSWORD PAGE
+   ========================================================= */
+
+function initializeResetPasswordPage() {
+
+    const form =
+        document.getElementById(
+            "resetPasswordForm"
+        ) ||
+        document.querySelector(
+            'form[data-form="reset-password"]'
+        );
+
+
+    if (!form) {
+
+        return;
+
+    }
+
+
+    if (
+        form.dataset.initialized ===
+        "true"
+    ) {
+
+        return;
+
+    }
+
+
+    form.dataset.initialized =
+        "true";
+
+
+    form.addEventListener(
+        "submit",
+        handleResetPassword
+    );
+
+}
+
+
+/* =========================================================
+   35. HANDLE RESET PASSWORD
+   ========================================================= */
+
+async function handleResetPassword(event) {
+
+    event.preventDefault();
+
+
+    if (!supabaseClient) {
+
+        showAuthError(
+            "Authentication service is unavailable."
+        );
+
+        return;
+
+    }
+
+
+    const passwordInput =
+        findInput([
+            "newPassword",
+            "password",
+            "resetPassword"
+        ]);
+
+
+    const confirmInput =
+        findInput([
+            "confirmPassword",
+            "confirm_password",
+            "confirmNewPassword"
+        ]);
+
+
+    if (!passwordInput) {
+
+        showAuthError(
+            "Password field not found."
+        );
+
+        return;
+
+    }
+
+
+    const password =
+        passwordInput.value;
+
+
+    const confirmPassword =
+        confirmInput
+            ? confirmInput.value
+            : password;
+
+
+    clearAuthMessages();
+
+
+    if (
+        password.length < 6
+    ) {
+
+        showAuthError(
+            "Password must contain at least 6 characters."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        password !==
+        confirmPassword
+    ) {
+
+        showAuthError(
+            "Passwords do not match."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .auth
+                .updateUser({
+                    password
+                });
+
+
+        if (error) {
+
+            console.error(
+                "Password update failed:",
+                error
+            );
+
+
+            showAuthError(
+                getAuthErrorMessage(error)
+            );
+
+
+            return;
+
+        }
+
+
+        showAuthSuccess(
+            "Password updated successfully."
+        );
+
+
+        setTimeout(
+            () => {
+
+                redirectToLogin();
+
+            },
+            1200
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Password reset error:",
+            error
+        );
+
+
+        showAuthError(
+            "Unable to update your password."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   36. REALTIME
    ========================================================= */
 
 function initializeRealtime() {
@@ -2557,25 +2849,21 @@ function initializeRealtime() {
         Remove previous channel.
     */
 
-    if (realtimeChannel) {
+    removeRealtimeChannel();
 
-        supabaseClient
-            .removeChannel(
-                realtimeChannel
-            );
 
-        realtimeChannel =
-            null;
-
-    }
+    const channelName =
+        `eldersafe-${currentUser.id}`;
 
 
     realtimeChannel =
         supabaseClient
-            .channel(
-                `eldersafe-${currentUser.id}`
-            );
+            .channel(channelName);
 
+
+    /*
+        Emergency alerts.
+    */
 
     realtimeChannel
         .on(
@@ -2598,13 +2886,32 @@ function initializeRealtime() {
                 );
 
             }
-        )
+        );
+
+
+    /*
+        Subscribe.
+    */
+
+    realtimeChannel
         .subscribe(
             status => {
 
                 console.log(
-                    "Realtime status:",
+                    "ELDERSAFE realtime:",
                     status
+                );
+
+
+                window.dispatchEvent(
+                    new CustomEvent(
+                        "eldersafe:realtime-status",
+                        {
+                            detail: {
+                                status
+                            }
+                        }
+                    )
                 );
 
             }
@@ -2614,7 +2921,46 @@ function initializeRealtime() {
 
 
 /* =========================================================
-   32. EMERGENCY REALTIME
+   37. REMOVE REALTIME CHANNEL
+   ========================================================= */
+
+async function removeRealtimeChannel() {
+
+    if (
+        !realtimeChannel ||
+        !supabaseClient
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        await supabaseClient
+            .removeChannel(
+                realtimeChannel
+            );
+
+    } catch (error) {
+
+        console.warn(
+            "Unable to remove realtime channel:",
+            error
+        );
+
+    }
+
+
+    realtimeChannel =
+        null;
+
+}
+
+
+/* =========================================================
+   38. EMERGENCY REALTIME EVENTS
    ========================================================= */
 
 function handleEmergencyRealtimeEvent(
@@ -2628,32 +2974,37 @@ function handleEmergencyRealtimeEvent(
     }
 
 
+    const eventType =
+        payload.eventType;
+
+
+    const emergency =
+        eventType === "DELETE"
+            ? payload.old
+            : payload.new;
+
+
     /*
-        New emergency.
+        INSERT
     */
 
     if (
-        payload.eventType ===
+        eventType ===
         "INSERT"
     ) {
 
         console.log(
             "NEW EMERGENCY:",
-            payload.new
+            emergency
         );
 
-
-        /*
-            Optional custom event.
-            Dashboard can listen for this.
-        */
 
         window.dispatchEvent(
             new CustomEvent(
                 "eldersafe:emergency",
                 {
                     detail:
-                        payload.new
+                        emergency
                 }
             )
         );
@@ -2662,17 +3013,17 @@ function handleEmergencyRealtimeEvent(
 
 
     /*
-        Emergency updated.
+        UPDATE
     */
 
-    if (
-        payload.eventType ===
+    else if (
+        eventType ===
         "UPDATE"
     ) {
 
         console.log(
             "EMERGENCY UPDATED:",
-            payload.new
+            emergency
         );
 
 
@@ -2681,7 +3032,7 @@ function handleEmergencyRealtimeEvent(
                 "eldersafe:emergency-updated",
                 {
                     detail:
-                        payload.new
+                        emergency
                 }
             )
         );
@@ -2690,17 +3041,17 @@ function handleEmergencyRealtimeEvent(
 
 
     /*
-        Emergency deleted.
+        DELETE
     */
 
-    if (
-        payload.eventType ===
+    else if (
+        eventType ===
         "DELETE"
     ) {
 
         console.log(
             "EMERGENCY REMOVED:",
-            payload.old
+            emergency
         );
 
 
@@ -2709,28 +3060,38 @@ function handleEmergencyRealtimeEvent(
                 "eldersafe:emergency-deleted",
                 {
                     detail:
-                        payload.old
+                        emergency
                 }
             )
         );
 
     }
 
+
+    /*
+        Generic emergency event.
+    */
+
+    window.dispatchEvent(
+        new CustomEvent(
+            "eldersafe:emergency-event",
+            {
+                detail: payload
+            }
+        )
+    );
+
 }
 
 
 /* =========================================================
-   33. AUTH LOADING
+   39. AUTH LOADING
    ========================================================= */
 
 function setAuthLoading(
     isLoading,
     type = "login"
 ) {
-
-    /*
-        Possible button IDs.
-    */
 
     const buttonIDs =
         type === "register"
@@ -2769,24 +3130,28 @@ function setAuthLoading(
 
 
     /*
-        Generic submit fallback.
+        Fallback submit button.
     */
 
     if (!button) {
 
         const form =
             type === "register"
-                ? document.getElementById(
-                    "registerForm"
-                ) ||
-                document.getElementById(
-                    "signupForm"
+                ? (
+                    document.getElementById(
+                        "registerForm"
+                    ) ||
+                    document.getElementById(
+                        "signupForm"
+                    )
                 )
-                : document.getElementById(
-                    "loginForm"
-                ) ||
-                document.getElementById(
-                    "signinForm"
+                : (
+                    document.getElementById(
+                        "loginForm"
+                    ) ||
+                    document.getElementById(
+                        "signinForm"
+                    )
                 );
 
 
@@ -2807,16 +3172,23 @@ function setAuthLoading(
         button.disabled =
             isLoading;
 
+
         button.classList.toggle(
             "loading",
             isLoading
+        );
+
+
+        button.setAttribute(
+            "aria-busy",
+            String(isLoading)
         );
 
     }
 
 
     /*
-        Text elements.
+        Button text.
     */
 
     const textIDs =
@@ -2852,7 +3224,7 @@ function setAuthLoading(
 
 
     /*
-        Spinner elements.
+        Spinners.
     */
 
     const spinnerIDs =
@@ -2890,7 +3262,7 @@ function setAuthLoading(
 
 
 /* =========================================================
-   34. AUTH ERROR
+   40. AUTH ERROR
    ========================================================= */
 
 function showAuthError(
@@ -2929,6 +3301,10 @@ function showAuthError(
         success.style.display =
             "none";
 
+        success.classList.remove(
+            "show"
+        );
+
     }
 
 
@@ -2951,6 +3327,7 @@ function showAuthError(
     error.hidden =
         false;
 
+
     error.style.display =
         "";
 
@@ -2963,7 +3340,7 @@ function showAuthError(
 
 
 /* =========================================================
-   35. AUTH SUCCESS
+   41. AUTH SUCCESS
    ========================================================= */
 
 function showAuthSuccess(
@@ -3002,6 +3379,10 @@ function showAuthSuccess(
         error.style.display =
             "none";
 
+        error.classList.remove(
+            "show"
+        );
+
     }
 
 
@@ -3037,14 +3418,21 @@ function showAuthSuccess(
 
 
 /* =========================================================
-   36. CLEAR AUTH MESSAGES
+   42. CLEAR AUTH MESSAGES
    ========================================================= */
 
 function clearAuthMessages() {
 
     const messages =
         document.querySelectorAll(
-            "#authError, #authSuccess, .auth-error, .auth-success, [data-auth-error], [data-auth-success]"
+            [
+                "#authError",
+                "#authSuccess",
+                ".auth-error",
+                ".auth-success",
+                "[data-auth-error]",
+                "[data-auth-success]"
+            ].join(",")
         );
 
 
@@ -3070,7 +3458,7 @@ function clearAuthMessages() {
 
 
 /* =========================================================
-   37. DASHBOARD ERROR
+   43. DASHBOARD ERROR
    ========================================================= */
 
 function showDashboardError(
@@ -3114,7 +3502,7 @@ function showDashboardError(
 
 
 /* =========================================================
-   38. AUTH ERROR TRANSLATOR
+   44. AUTH ERROR TRANSLATOR
    ========================================================= */
 
 function getAuthErrorMessage(
@@ -3126,7 +3514,7 @@ function getAuthErrorMessage(
             error?.message ||
             ""
         )
-        .toLowerCase();
+            .toLowerCase();
 
 
     if (
@@ -3262,6 +3650,32 @@ function getAuthErrorMessage(
     }
 
 
+    if (
+        message.includes(
+            "user not found"
+        )
+    ) {
+
+        return (
+            "No account was found with that email address."
+        );
+
+    }
+
+
+    if (
+        message.includes(
+            "same password"
+        )
+    ) {
+
+        return (
+            "Please choose a different password."
+        );
+
+    }
+
+
     return (
         error?.message ||
         "Something went wrong. Please try again."
@@ -3271,7 +3685,7 @@ function getAuthErrorMessage(
 
 
 /* =========================================================
-   39. GET CURRENT USER
+   45. GET CURRENT USER
    ========================================================= */
 
 async function getCurrentUser() {
@@ -3321,7 +3735,7 @@ window.getCurrentUser =
 
 
 /* =========================================================
-   40. GET CURRENT PROFILE GLOBAL
+   46. GET CURRENT PROFILE GLOBAL
    ========================================================= */
 
 async function getProfile() {
@@ -3362,7 +3776,70 @@ window.getProfile =
 
 
 /* =========================================================
-   41. GLOBAL SUPABASE ACCESS
+   47. REFRESH PROFILE
+   ========================================================= */
+
+async function refreshProfile() {
+
+    if (!currentUser) {
+
+        currentUser =
+            await getCurrentUser();
+
+    }
+
+
+    if (!currentUser) {
+
+        currentProfile =
+            null;
+
+        return null;
+
+    }
+
+
+    currentProfile =
+        await getCurrentProfile();
+
+
+    return currentProfile;
+
+}
+
+
+window.refreshProfile =
+    refreshProfile;
+
+
+/* =========================================================
+   48. CHECK AUTHENTICATION
+   ========================================================= */
+
+async function isAuthenticated() {
+
+    if (!supabaseClient) {
+
+        return false;
+
+    }
+
+
+    const user =
+        await getCurrentUser();
+
+
+    return !!user;
+
+}
+
+
+window.isAuthenticated =
+    isAuthenticated;
+
+
+/* =========================================================
+   49. GLOBAL SUPABASE ACCESS
    ========================================================= */
 
 window.supabaseClient =
@@ -3370,7 +3847,7 @@ window.supabaseClient =
 
 
 /* =========================================================
-   42. GLOBAL ELDERSAFE STATE
+   50. GLOBAL ELDERSAFE OBJECT
    ========================================================= */
 
 window.ELDERSAFE = {
@@ -3396,35 +3873,103 @@ window.ELDERSAFE = {
     },
 
 
+    get realtimeChannel() {
+
+        return realtimeChannel;
+
+    },
+
+
     logout,
 
     getCurrentUser,
 
-    getProfile
+    getProfile,
+
+    refreshProfile,
+
+    isAuthenticated,
+
+    initializeRealtime,
+
+    removeRealtimeChannel
 
 };
 
 
 /* =========================================================
-   43. DEBUG INFORMATION
+   51. GLOBAL DEBUG HELPERS
+   ========================================================= */
+
+window.ELDERSAFE_DEBUG = {
+
+    getPage() {
+
+        return activePage;
+
+    },
+
+
+    getUser() {
+
+        return currentUser;
+
+    },
+
+
+    getProfile() {
+
+        return currentProfile;
+
+    },
+
+
+    getRealtimeChannel() {
+
+        return realtimeChannel;
+
+    },
+
+
+    getSupabase() {
+
+        return supabaseClient;
+
+    }
+
+};
+
+
+/* =========================================================
+   52. STARTUP LOG
    ========================================================= */
 
 console.log(
-    "ELDERSAFE app.js loaded."
+    "======================================"
 );
 
+console.log(
+    "ELDERSAFE app.js loaded successfully."
+);
+
+console.log(
+    "Version: 3.0"
+);
 
 console.log(
     "Current page:",
     activePage
 );
 
-
 console.log(
     "Supabase:",
     supabaseClient
         ? "Connected"
         : "Not available"
+);
+
+console.log(
+    "======================================"
 );
 
 

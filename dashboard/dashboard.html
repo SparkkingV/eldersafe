@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color"
+          content="#10282f">
+
+    <meta name="description"
+          content="ELDERSAFE real-time safety dashboard.">
+
+    <title>ELDERSAFE | Dashboard</title>
+
+
+    <!-- GOOGLE FONT -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+
+    <!-- FONT AWESOME -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+    <!-- SUPABASE -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <!-- DASHBOARD CSS -->
+
+    <link rel="stylesheet"
+          href="dashboard.css">
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     APP
+===================================================== -->
+
+<div class="dashboard-app">
+
+
+    <!-- =================================================
+         SIDEBAR
+    ================================================== -->
+
+    <aside class="sidebar"
+           id="sidebar">
+
+
+        <!-- LOGO -->
+
+        <a href="../index.html"
+           class="sidebar-logo">
+
+            <div class="sidebar-logo-icon">
+
+                <i class="fa-solid fa-shield-heart"></i>
+
+            </div>
+
+            <div>
+
+                <span>ELDER</span>
+                <strong>SAFE</strong>
+
+            </div>
+
+        </a>
+
+
+        <!-- USER -->
+
+        <div class="sidebar-user">
+
+            <div class="user-avatar">
+
+                <i class="fa-solid fa-user"></i>
+
+            </div>
+
+            <div class="user-details">
+
+                <strong id="sidebarUserName">
+                    Loading...
+                </strong>
+
+                <span id="sidebarUserRole">
+                    Patient
+                </span>
+
+            </div>
+
+            <span class="online-indicator"></span>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="sidebar-nav">
+
+
+            <div class="nav-section-title">
+                MAIN
+            </div>
+
+
+            <a href="#overview"
+               class="sidebar-link active"
+               data-section="overview">
+
+                <i class="fa-solid fa-grid-2"></i>
+
+                <span>Overview</span>
+
+            </a>
+
+
+            <a href="#monitoring"
+               class="sidebar-link"
+               data-section="monitoring">
+
+                <i class="fa-solid fa-heart-pulse"></i>
+
+                <span>Monitoring</span>
+
+                <span class="nav-badge live">
+                    LIVE
+                </span>
+
+            </a>
+
+
+            <a href="#alerts"
+               class="sidebar-link"
+               data-section="alerts">
+
+                <i class="fa-solid fa-bell"></i>
+
+                <span>Alerts</span>
+
+                <span class="nav-badge"
+                      id="alertBadge">
+                    0
+                </span>
+
+            </a>
+
+
+            <a href="#location"
+               class="sidebar-link"
+               data-section="location">
+
+                <i class="fa-solid fa-location-dot"></i>
+
+                <span>Location</span>
+
+            </a>
+
+
+            <div class="nav-section-title">
+                SYSTEM
+            </div>
+
+
+            <a href="#device"
+               class="sidebar-link"
+               data-section="device">
+
+                <i class="fa-solid fa-microchip"></i>
+
+                <span>Device</span>
+
+            </a>
+
+
+            <a href="#activity"
+               class="sidebar-link"
+               data-section="activity">
+
+                <i class="fa-solid fa-clock-rotate-left"></i>
+
+                <span>Activity</span>
+
+            </a>
+
+
+            <a href="settings.html"
+               class="sidebar-link">
+
+                <i class="fa-solid fa-gear"></i>
+
+                <span>Settings</span>
+
+            </a>
+
+        </nav>
+
+
+        <!-- SIDEBAR BOTTOM -->
+
+        <div class="sidebar-bottom">
+
+
+            <div class="connection-box">
+
+                <span class="connection-dot"></span>
+
+                <div>
+
+                    <strong>
+                        System Online
+                    </strong>
+
+                    <small>
+                        All services operational
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <button class="logout-button"
+                    id="logoutButton">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                <span>
+                    Sign Out
+                </span>
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =================================================
+         MOBILE OVERLAY
+    ================================================== -->
+
+    <div class="sidebar-overlay"
+         id="sidebarOverlay"></div>
+
+
+
+    <!-- =================================================
+         MAIN CONTENT
+    ================================================== -->
+
+    <main class="dashboard-main">
+
+
+        <!-- =================================================
+             TOPBAR
+        ================================================== -->
+
+        <header class="dashboard-topbar">
+
+
+            <div class="topbar-left">
+
+
+                <button class="mobile-sidebar-button"
+                        id="mobileSidebarButton">
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </button>
+
+
+                <div>
+
+                    <span class="breadcrumb">
+                        ELDERSAFE
+                        <i class="fa-solid fa-chevron-right"></i>
+                        Dashboard
+                    </span>
+
+                    <h1>
+                        Good evening,
+                        <span id="topUserName">
+                            User
+                        </span>
+                    </h1>
+
+                </div>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+
+                <!-- SYSTEM STATUS -->
+
+                <div class="system-status">
+
+                    <span class="status-pulse"></span>
+
+                    <span>
+                        System Operational
+                    </span>
+
+                </div>
+
+
+                <!-- NOTIFICATIONS -->
+
+                <button class="topbar-icon-button"
+                        id="notificationButton">
+
+                    <i class="fa-regular fa-bell"></i>
+
+                    <span class="notification-dot"
+                          id="notificationDot"></span>
+
+                </button>
+
+
+                <!-- PROFILE -->
+
+                <button class="profile-button"
+                        id="profileButton">
+
+                    <div class="profile-avatar">
+
+                        <i class="fa-solid fa-user"></i>
+
+                    </div>
+
+                    <i class="fa-solid fa-chevron-down profile-arrow"></i>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             CONTENT
+        ================================================== -->
+
+        <div class="dashboard-content"
+             id="overview">
+
+
+            <!-- =================================================
+                 PAGE INTRO
+            ================================================== -->
+
+            <section class="dashboard-intro">
+
+                <div>
+
+                    <span class="dashboard-label">
+                        REAL-TIME SAFETY CENTER
+                    </span>
+
+                    <h2>
+                        Your safety is
+                        <span>being monitored.</span>
+                    </h2>
+
+                    <p>
+                        ELDERSAFE is actively monitoring your
+                        connected safety device and emergency
+                        status.
+                    </p>
+
+                </div>
+
+
+                <div class="current-time">
+
+                    <i class="fa-regular fa-clock"></i>
+
+                    <div>
+
+                        <small>
+                            CURRENT TIME
+                        </small>
+
+                        <strong id="currentTime">
+                            --:--
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 EMERGENCY ALERT
+            ================================================== -->
+
+            <section class="emergency-alert"
+                     id="emergencyAlert"
+                     hidden>
+
+
+                <div class="emergency-alert-icon">
+
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+
+                </div>
+
+
+                <div class="emergency-alert-content">
+
+                    <span>
+                        EMERGENCY DETECTED
+                    </span>
+
+                    <h3>
+                        Possible fall detected
+                    </h3>
+
+                    <p>
+                        ELDERSAFE has detected an abnormal
+                        movement event. Please confirm your
+                        safety immediately.
+                    </p>
+
+                </div>
+
+
+                <div class="emergency-alert-actions">
+
+                    <button class="btn-emergency-confirm"
+                            id="safeButton">
+
+                        <i class="fa-solid fa-check"></i>
+
+                        I'm Safe
+
+                    </button>
+
+
+                    <button class="btn-emergency-help"
+                            id="helpButton">
+
+                        <i class="fa-solid fa-truck-medical"></i>
+
+                        Request Help
+
+                    </button>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 SAFETY STATUS
+            ================================================== -->
+
+            <section class="safety-overview">
+
+
+                <div class="main-safety-card">
+
+
+                    <div class="safety-card-top">
+
+                        <div>
+
+                            <span class="card-label">
+                                CURRENT SAFETY STATUS
+                            </span>
+
+                            <h3 id="safetyStatus">
+                                Everything is safe
+                            </h3>
+
+                            <p id="safetyMessage">
+                                No emergency events detected.
+                            </p>
+
+                        </div>
+
+
+                        <div class="large-safe-icon"
+                             id="largeSafeIcon">
+
+                            <i class="fa-solid fa-shield-heart"></i>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="safety-progress">
+
+
+                        <div class="progress-header">
+
+                            <span>
+                                MONITORING
+                            </span>
+
+                            <strong>
+                                ACTIVE
+                            </strong>
+
+                        </div>
+
+
+                        <div class="progress-track">
+
+                            <div class="progress-fill"></div>
+
+                        </div>
+
+
+                        <div class="progress-footer">
+
+                            <span>
+                                Device connected
+                            </span>
+
+                            <span>
+                                Monitoring continuously
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- QUICK EMERGENCY -->
+
+                <div class="quick-emergency-card">
+
+
+                    <div class="quick-icon">
+
+                        <i class="fa-solid fa-phone-volume"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            NEED HELP?
+                        </span>
+
+                        <strong>
+                            Emergency Assistance
+                        </strong>
+
+                        <p>
+                            Contact your emergency response team.
+                        </p>
+
+                    </div>
+
+
+                    <button id="emergencyButton"
+                            class="emergency-button">
+
+                        <i class="fa-solid fa-bell"></i>
+
+                        Emergency
+
+                    </button>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 STAT CARDS
+            ================================================== -->
+
+            <section class="stats-grid">
+
+
+                <div class="stat-card">
+
+
+                    <div class="stat-card-icon teal">
+
+                        <i class="fa-solid fa-microchip"></i>
+
+                    </div>
+
+
+                    <div class="stat-card-content">
+
+                        <span>
+                            DEVICE
+                        </span>
+
+                        <strong id="deviceStatus">
+                            Connected
+                        </strong>
+
+                        <small class="positive">
+
+                            <i class="fa-solid fa-circle"></i>
+
+                            Online now
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="stat-card">
+
+
+                    <div class="stat-card-icon blue">
+
+                        <i class="fa-solid fa-location-crosshairs"></i>
+
+                    </div>
+
+
+                    <div class="stat-card-content">
+
+                        <span>
+                            LOCATION
+                        </span>
+
+                        <strong id="locationStatus">
+                            Active
+                        </strong>
+
+                        <small class="positive">
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            GPS available
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="stat-card">
+
+
+                    <div class="stat-card-icon green">
+
+                        <i class="fa-solid fa-shield-halved"></i>
+
+                    </div>
+
+
+                    <div class="stat-card-content">
+
+                        <span>
+                            SAFETY EVENTS
+                        </span>
+
+                        <strong id="eventCount">
+                            0
+                        </strong>
+
+                        <small>
+                            Today
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="stat-card">
+
+
+                    <div class="stat-card-icon orange">
+
+                        <i class="fa-solid fa-clock"></i>
+
+                    </div>
+
+
+                    <div class="stat-card-content">
+
+                        <span>
+                            MONITORING
+                        </span>
+
+                        <strong id="monitoringTime">
+                            24/7
+                        </strong>
+
+                        <small>
+                            Continuous
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 TWO COLUMN AREA
+            ================================================== -->
+
+            <section class="dashboard-grid">
+
+
+                <!-- =================================================
+                     LIVE MONITORING
+                ================================================== -->
+
+                <div class="dashboard-card monitoring-card"
+                     id="monitoring">
+
+
+                    <div class="card-header">
+
+
+                        <div>
+
+                            <span class="card-label">
+                                LIVE MONITORING
+                            </span>
+
+                            <h3>
+                                Patient Monitoring
+                            </h3>
+
+                        </div>
+
+
+                        <span class="live-badge">
+
+                            <span></span>
+
+                            LIVE
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="monitoring-body">
+
+
+                        <div class="monitor-circle">
+
+
+                            <div class="monitor-inner">
+
+                                <i class="fa-solid fa-heart-pulse"></i>
+
+                                <strong>
+                                    SAFE
+                                </strong>
+
+                                <span>
+                                    Monitoring
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="monitor-details">
+
+
+                            <div class="monitor-detail">
+
+                                <span>
+                                    MOVEMENT
+                                </span>
+
+                                <strong id="movementStatus">
+                                    Normal
+                                </strong>
+
+                            </div>
+
+
+                            <div class="monitor-detail">
+
+                                <span>
+                                    FALL RISK
+                                </span>
+
+                                <strong class="safe-text">
+                                    Low
+                                </strong>
+
+                            </div>
+
+
+                            <div class="monitor-detail">
+
+                                <span>
+                                    LAST CHECK
+                                </span>
+
+                                <strong id="lastCheck">
+                                    Just now
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     DEVICE
+                ================================================== -->
+
+                <div class="dashboard-card"
+                     id="device">
+
+
+                    <div class="card-header">
+
+
+                        <div>
+
+                            <span class="card-label">
+                                CONNECTED DEVICE
+                            </span>
+
+                            <h3>
+                                ESP32 Safety Unit
+                            </h3>
+
+                        </div>
+
+
+                        <div class="device-online">
+
+                            <span></span>
+
+                            Online
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="device-panel">
+
+
+                        <div class="device-visual">
+
+                            <i class="fa-solid fa-microchip"></i>
+
+                        </div>
+
+
+                        <div class="device-info">
+
+
+                            <div>
+
+                                <span>
+                                    DEVICE ID
+                                </span>
+
+                                <strong id="deviceId">
+                                    ELD-ESP32-001
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    CONNECTION
+                                </span>
+
+                                <strong>
+                                    Wi-Fi / Cloud
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    LAST SIGNAL
+                                </span>
+
+                                <strong id="lastSignal">
+                                    Just now
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="device-footer">
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                        Device is operating normally
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     LOCATION
+                ================================================== -->
+
+                <div class="dashboard-card location-card"
+                     id="location">
+
+
+                    <div class="card-header">
+
+
+                        <div>
+
+                            <span class="card-label">
+                                LIVE LOCATION
+                            </span>
+
+                            <h3>
+                                Patient Location
+                            </h3>
+
+                        </div>
+
+
+                        <button class="small-action"
+                                id="refreshLocation">
+
+                            <i class="fa-solid fa-rotate"></i>
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="location-map">
+
+
+                        <div class="map-grid"></div>
+
+
+                        <div class="map-ripple ripple-one"></div>
+
+                        <div class="map-ripple ripple-two"></div>
+
+
+                        <div class="map-marker">
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                        </div>
+
+
+                        <div class="map-label">
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            <span id="locationText">
+                                Location available
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="location-footer">
+
+                        <div>
+
+                            <span>
+                                GPS STATUS
+                            </span>
+
+                            <strong class="gps-active">
+
+                                <i class="fa-solid fa-circle"></i>
+
+                                Active
+
+                            </strong>
+
+                        </div>
+
+
+                        <button id="openMapButton"
+                                class="map-button">
+
+                            Open Map
+
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     ACTIVITY
+                ================================================== -->
+
+                <div class="dashboard-card activity-dashboard-card"
+                     id="activity">
+
+
+                    <div class="card-header">
+
+
+                        <div>
+
+                            <span class="card-label">
+                                RECENT ACTIVITY
+                            </span>
+
+                            <h3>
+                                Safety Timeline
+                            </h3>
+
+                        </div>
+
+
+                        <button class="small-action"
+                                id="clearActivity">
+
+                            <i class="fa-solid fa-ellipsis"></i>
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="timeline"
+                         id="activityTimeline">
+
+
+                        <div class="timeline-item">
+
+
+                            <div class="timeline-icon green">
+
+                                <i class="fa-solid fa-check"></i>
+
+                            </div>
+
+
+                            <div class="timeline-content">
+
+                                <strong>
+                                    System check completed
+                                </strong>
+
+                                <span>
+                                    All safety systems operating normally
+                                </span>
+
+                                <small>
+                                    Just now
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="timeline-item">
+
+
+                            <div class="timeline-icon blue">
+
+                                <i class="fa-solid fa-wifi"></i>
+
+                            </div>
+
+
+                            <div class="timeline-content">
+
+                                <strong>
+                                    Device connected
+                                </strong>
+
+                                <span>
+                                    ESP32 safety unit is online
+                                </span>
+
+                                <small>
+                                    2 minutes ago
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="timeline-item">
+
+
+                            <div class="timeline-icon teal">
+
+                                <i class="fa-solid fa-shield"></i>
+
+                            </div>
+
+
+                            <div class="timeline-content">
+
+                                <strong>
+                                    Safety monitoring started
+                                </strong>
+
+                                <span>
+                                    Continuous monitoring is active
+                                </span>
+
+                                <small>
+                                    5 minutes ago
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="timeline-item">
+
+
+                            <div class="timeline-icon purple">
+
+                                <i class="fa-solid fa-user-check"></i>
+
+                            </div>
+
+
+                            <div class="timeline-content">
+
+                                <strong>
+                                    Patient authenticated
+                                </strong>
+
+                                <span>
+                                    Secure session established
+                                </span>
+
+                                <small>
+                                    8 minutes ago
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 ALERTS SECTION
+            ================================================== -->
+
+            <section class="dashboard-card alerts-section"
+                     id="alerts">
+
+
+                <div class="card-header">
+
+
+                    <div>
+
+                        <span class="card-label">
+                            ALERT CENTER
+                        </span>
+
+                        <h3>
+                            Emergency Events
+                        </h3>
+
+                    </div>
+
+
+                    <span class="alert-count"
+                          id="alertCount">
+
+                        0 Active
+
+                    </span>
+
+                </div>
+
+
+                <div class="empty-alerts"
+                     id="emptyAlerts">
+
+                    <div class="empty-alert-icon">
+
+                        <i class="fa-solid fa-shield-check"></i>
+
+                    </div>
+
+
+                    <h4>
+                        No emergency alerts
+                    </h4>
+
+
+                    <p>
+                        ELDERSAFE has not detected any
+                        emergency events.
+                    </p>
+
+                </div>
+
+
+                <div class="alerts-list"
+                     id="alertsList">
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 FOOTER
+            ================================================== -->
+
+            <footer class="dashboard-footer">
+
+                <span>
+                    © 2026 ELDERSAFE
+                </span>
+
+                <span>
+                    Real-time elderly safety technology
+                </span>
+
+                <span class="footer-secure">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    Secure connection
+
+                </span>
+
+            </footer>
+
+
+        </div>
+
+    </main>
+
+</div>
+
+
+
+<!-- =====================================================
+     EMERGENCY MODAL
+===================================================== -->
+
+<div class="modal-overlay"
+     id="emergencyModal"
+     hidden>
+
+
+    <div class="emergency-modal">
+
+
+        <button class="modal-close"
+                id="closeEmergencyModal">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+
+        <div class="modal-emergency-icon">
+
+            <i class="fa-solid fa-bell"></i>
+
+        </div>
+
+
+        <span class="modal-label">
+            EMERGENCY ASSISTANCE
+        </span>
+
+
+        <h2>
+            Request emergency help?
+        </h2>
+
+
+        <p>
+            This will notify the connected emergency
+            response team and share your available
+            location information.
+        </p>
+
+
+        <div class="modal-warning">
+
+            <i class="fa-solid fa-location-dot"></i>
+
+            <span>
+                Your current location will be shared
+                with the response team.
+            </span>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button class="modal-cancel"
+                    id="cancelEmergency">
+
+                Cancel
+
+            </button>
+
+
+            <button class="modal-confirm"
+                    id="confirmEmergency">
+
+                <i class="fa-solid fa-truck-medical"></i>
+
+                Request Help
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     PROFILE MENU
+===================================================== -->
+
+<div class="profile-menu"
+     id="profileMenu"
+     hidden>
+
+    <div class="profile-menu-header">
+
+        <div class="profile-avatar large">
+
+            <i class="fa-solid fa-user"></i>
+
+        </div>
+
+        <div>
+
+            <strong id="profileMenuName">
+                User
+            </strong>
+
+            <span id="profileMenuEmail">
+                user@example.com
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <a href="settings.html">
+
+        <i class="fa-solid fa-gear"></i>
+
+        Account Settings
+
+    </a>
+
+
+    <button id="profileLogout">
+
+        <i class="fa-solid fa-right-from-bracket"></i>
+
+        Sign Out
+
+    </button>
+
+</div>
+
+
+
+<!-- DASHBOARD JS -->
+
+<script src="dashboard.js"></script>
+
+
+</body>
+</html>
